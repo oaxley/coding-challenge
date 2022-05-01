@@ -1,0 +1,11 @@
+# vim: set ft=ignore
+
+# development environment files
+**/.python-version
+**/.envrc
+
+# python files
+**/__pycache__
+
+# SQLite database
+**/*.sqlite
