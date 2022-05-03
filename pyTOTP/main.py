@@ -43,6 +43,20 @@ def dbConnection():
     Session = sessionmaker(bind=engine)
     return Session()
 
+def retrieveUser(account: str, issuer: str) -> Optional[User]:
+    """Retrieve the user details from the database"""
+    # retrieve the database session
+    session = dbConnection()
+
+    # verify if the account / issuer already exist in the database
+    return (session
+                .query(User)
+                .filter(User.account == account)
+                .filter(User.issuer == issuer)
+                .first()
+    )
+
+
 
 @click.group()
 def main():
