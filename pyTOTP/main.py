@@ -16,6 +16,7 @@ from __future__ import annotations
 from typing import Optional
 
 import os
+import click
 import logging
 
 from sqlalchemy import create_engine
@@ -43,8 +44,41 @@ def dbConnection():
     return Session()
 
 
+@click.group()
 def main():
     """Main entry point"""
+
+
+@main.command
+@click.argument('account')
+@click.argument('issuer')
+def create(account: str, issuer: str):
+    """Create a new entry in the database"""
+
+@main.command()
+@click.argument('account')
+@click.argument('issuer')
+def qrcode(account: str, issuer: str):
+    """Generate the QRCode for Google Authenticator"""
+
+@main.command()
+@click.argument('account')
+@click.argument('issuer')
+def rfc6238(account: str, issuer: str):
+    """Generate the RFC6238 string for KeyPassXC"""
+
+@main.command()
+@click.argument('account')
+@click.argument('issuer')
+def show(account: str, issuer: str):
+    """Show the current value for the TOTP"""
+
+@main.command()
+@click.argument('account')
+@click.argument('issuer')
+@click.argument('value')
+def check(account: str, issuer: str, value: str):
+    """Validate a value against the current TOTP parameters"""
 
 
 #----- begin
