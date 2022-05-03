@@ -16,14 +16,19 @@ from __future__ import annotations
 from typing import Optional
 
 import os
+import sys
 import click
+import base64
 import logging
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-from .database import Base, User
+from database import Base, User
+
+#----- globals
+SECRET_KEY_LENGTH = 20
 
 
 #----- functions
@@ -56,6 +61,9 @@ def retrieveUser(account: str, issuer: str) -> Optional[User]:
                 .first()
     )
 
+def getSecretKey() -> bytes:
+    """Create a 160bits (20 x 8) secret key"""
+    return os.urandom(SECRET_KEY_LENGTH)
 
 
 @click.group()
@@ -68,6 +76,23 @@ def main():
 @click.argument('issuer')
 def create(account: str, issuer: str):
     """Create a new entry in the database"""
+    # verify if the account exist already
+    result = retrieveUser(account, issuer)
+    if result:
+        logging.error(f"Sorry, an entry for {account}/{issuer} already exists in the database.")
+        sys.exit(1)
+
+    # create a new secret key for this user
+    secret_key = getSecretKey()
+
+    # create the user
+    user = User(account=account, issuer=issuer, secret_key=base64.b64encode(secret_key))
+
+    # add it to the db
+    session = dbConnection()
+    session.add(user)
+    session.commit()
+
 
 @main.command()
 @click.argument('account')
@@ -97,4 +122,5 @@ def check(account: str, issuer: str, value: str):
 
 #----- begin
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     main()
