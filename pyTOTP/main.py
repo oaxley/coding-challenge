@@ -207,7 +207,24 @@ def show(account: str, issuer: str):
 @click.argument('value')
 def check(account: str, issuer: str, value: str):
     """Validate a value against the current TOTP parameters"""
+    # verify that the account exists
+    result = retrieveUser(account, issuer)
+    if result is None:
+        logging.error(f"Sorry, there is no entry for {account}/{issuer} in the database.")
+        sys.exit(1)
+    else:
+        user: User = result
 
+    # create the TOTP object
+    data = createTOTP(user)
+
+    # validate the user input
+    try:
+        data.verify(value.encode(), int(time.time()))
+        click.echo("The code is valid.")
+    except InvalidToken:
+        click.echo("The code is invalid")
+        sys.exit(1)
 
 #----- begin
 if __name__ == "__main__":
