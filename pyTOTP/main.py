@@ -148,6 +148,21 @@ def qrcode(account: str, issuer: str):
 @click.argument('issuer')
 def rfc6238(account: str, issuer: str):
     """Generate the RFC6238 string for KeyPassXC"""
+    # verify that the account exists
+    result = retrieveUser(account, issuer)
+    if result is None:
+        logging.error(f"Sorry, there is no entry for {account}/{issuer} in the database.")
+        sys.exit(1)
+    else:
+        user: User = result
+
+    # encode the secret_key as a Base32
+    secret_key = base64.b64decode(user.secret_key)
+    secret_key_b32 = base64.b32encode(secret_key)
+
+    # display the value to the user
+    click.echo(f"RFC 6238 value: {secret_key_b32.decode()}")
+
 
 @main.command()
 @click.argument('account')
