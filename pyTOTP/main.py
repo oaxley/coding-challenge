@@ -20,6 +20,11 @@ import sys
 import click
 import base64
 import logging
+import qrcode as QRCode
+
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.twofactor import totp, InvalidToken
+from cryptography.hazmat.primitives.hashes import SHA1
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -28,7 +33,9 @@ from sqlalchemy.orm import sessionmaker
 from database import Base, User
 
 #----- globals
-SECRET_KEY_LENGTH = 20
+SECRET_KEY_LENGTH = 20      # length for SHA1 hashing function
+PASSWORD_SIZE = 6           # we keep only 6 digits
+PASSWORD_TIME = 30          # password is valid only for 30s
 
 
 #----- functions
@@ -65,6 +72,16 @@ def getSecretKey() -> bytes:
     """Create a 160bits (20 x 8) secret key"""
     return os.urandom(SECRET_KEY_LENGTH)
 
+def createTOTP(user: User) -> totp.TOTP:
+    """Create the TOTP object"""
+    return totp.TOTP(
+                base64.b64decode(user.secret_key),
+                PASSWORD_SIZE,
+                SHA1(),
+                PASSWORD_TIME,
+                backend=default_backend()
+    )
+
 
 @click.group()
 def main():
@@ -99,6 +116,32 @@ def create(account: str, issuer: str):
 @click.argument('issuer')
 def qrcode(account: str, issuer: str):
     """Generate the QRCode for Google Authenticator"""
+    # verify that the account exists
+    result = retrieveUser(account, issuer)
+    if result is None:
+        logging.error(f"Sorry, there is no entry for {account}/{issuer} in the database.")
+        sys.exit(1)
+    else:
+        user: User = result
+
+    # create the totp object and generate the corresponding URI
+    data = createTOTP(user)
+    uri = data.get_provisioning_uri(account, issuer)
+
+    # generate the QRCode
+    qr = QRCode.QRCode(
+        version=1,
+        error_correction=QRCode.constants.ERROR_CORRECT_L,
+        box_size=5,
+        border=4,
+    )
+    qr.add_data(uri)
+    qr.make()
+
+    # create the image with Pillow and display it
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.show()
+
 
 @main.command()
 @click.argument('account')
