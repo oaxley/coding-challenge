@@ -17,6 +17,7 @@ from typing import Optional
 
 import os
 import sys
+import time
 import click
 import base64
 import logging
@@ -169,6 +170,36 @@ def rfc6238(account: str, issuer: str):
 @click.argument('issuer')
 def show(account: str, issuer: str):
     """Show the current value for the TOTP"""
+    # verify that the account exists
+    result = retrieveUser(account, issuer)
+    if result is None:
+        logging.error(f"Sorry, there is no entry for {account}/{issuer} in the database.")
+        sys.exit(1)
+    else:
+        user: User = result
+
+    # create the TOTP object
+    data = createTOTP(user)
+
+    # print the current value every 30s
+    click.echo("Press CTRL+C to stop")
+    old_time = 0
+    new_time = int(time.time()) // PASSWORD_TIME
+
+    while True:
+        try:
+            if new_time > old_time:
+                value = data.generate(int(time.time())).decode()
+                click.echo(value)
+
+                old_time = new_time
+            else:
+                time.sleep(1)
+
+            new_time = int(time.time()) // PASSWORD_TIME
+
+        except KeyboardInterrupt:
+            break
 
 @main.command()
 @click.argument('account')
