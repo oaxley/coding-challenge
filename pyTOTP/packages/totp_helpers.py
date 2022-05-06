@@ -114,7 +114,7 @@ def validateTOTP(account: str, issuer: str, value: str) -> bool:
         print("The code is valid.")
 
     except InvalidToken:
-        print("The code is invalid")
+        print("The code is invalid.")
         return False
 
     return True
