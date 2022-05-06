@@ -9,3 +9,7 @@
 
 # SQLite database
 **/*.sqlite
+
+# images except the one from documentation
+**/*.png
+!qrcode.png
