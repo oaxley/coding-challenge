@@ -64,7 +64,11 @@ def createQRCode(account: str, issuer: str) -> None:
 
     # create the image with Pillow and display it
     img = qr.make_image(fill_color="black", back_color="white")
-    img.show()
+
+    filename: str = base64.b32encode(f'{account}-{issuer}'.encode()).decode()
+    filename = filename.replace('=', '')[:12]
+    img.save(f'{filename}.png')
+    print(f"Image saved to {filename}.png")
 
 
 def showTOTP(account: str, issuer: str) -> None:
