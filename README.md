@@ -28,7 +28,7 @@ All the projects and a link to their respective directory in the repo will be li
 
 | Year | Month | Project Name | Description | Language |
 | :-: | :-: | :-- | :-- | :-- |
-| 2022 | May | pyTOTP | A TOTP CLI manager | ![Python](https://img.shields.io/badge/Python-3.9.6-blue?style=flat-square)
+| 2022 | May | [pyTOTP](./pyTOTP/README.md) | A TOTP CLI manager | ![Python](https://img.shields.io/badge/Python-3.9.6-blue?style=flat-square)
 
 
 
