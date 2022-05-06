@@ -18,11 +18,8 @@ import sys
 import click
 import logging
 
-from db_helpers import (
-    createUser, isExistUser, getRFC6238
-)
-
-from totp_helpers import (
+from packages import (
+    createUser, isExistUser, getRFC6238,
     createQRCode, showTOTP, validateTOTP
 )
 
@@ -31,7 +28,7 @@ from totp_helpers import (
 
 @click.group()
 def main():
-    """Main entry point"""
+    """pyTOTP - A TOTP CLI manager"""
 
 
 @main.command

@@ -22,7 +22,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.twofactor import totp, InvalidToken
 from cryptography.hazmat.primitives.hashes import SHA1
 
-from db_helpers import retrieveUser
+from .db_helpers import retrieveUser
 
 
 #----- globals
