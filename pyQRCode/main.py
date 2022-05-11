@@ -16,9 +16,30 @@ from __future__ import annotations
 from typing import Any
 
 import argparse
+import qrcode
 
 
 #----- functions
+def createQRCode(data: bytes, filename: str) -> None:
+    """Generate a QRCode with the data provided"""
+    # new QRCode instance
+    qr = qrcode.QRCode(
+        version=None,
+        error_correction=qrcode.ERROR_CORRECT_L,
+        box_size=10,
+        border=4
+    )
+
+    # add some data to it
+    qr.add_data(data)
+
+    # create the image
+    qr.make(fit=True)
+    img = qr.make_image(fill_color='black', back_color='white')
+
+    # save the image
+    img.save(filename)
+    print(f"QRCode saved to {filename}.")
 
 
 #----- begin
