@@ -18,6 +18,8 @@ from typing import Any
 import argparse
 import qrcode
 
+from definitions import PluginManager, PluginTask
+
 
 #----- functions
 def createQRCode(data: bytes, filename: str) -> None:
@@ -43,11 +45,19 @@ def createQRCode(data: bytes, filename: str) -> None:
 
 
 #----- begin
+# plugin manager
+manager = PluginManager()
 
 # argument parser
 parser = argparse.ArgumentParser(description="QRCode generator")
 parser.add_argument("--image", required=True, help="Output image filename")
-parser.add_argument("--type", required=True, help="QRCode type")
+parser.add_argument("--type", required=True, choices=manager.availablePlugins() ,help="QRCode type")
 
 args = parser.parse_args()
 
+# execute the required plugin
+plugin: PluginTask = manager.factory(args.type)
+data = plugin.process()
+
+# create the QRCode from the data
+createQRCode(data, args.image)
