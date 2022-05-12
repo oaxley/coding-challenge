@@ -20,6 +20,8 @@ import qrcode
 
 from definitions import PluginManager, PluginTask
 
+# register all the plugins
+import plugins
 
 #----- functions
 def createQRCode(data: bytes, filename: str) -> None:
