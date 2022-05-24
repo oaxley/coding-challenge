@@ -13,7 +13,7 @@
 
 #----- imports
 from __future__ import annotations
-from typing import Any
+from typing import Any, Optional
 
 import argparse
 
@@ -41,6 +41,16 @@ def detectType(data: bytes) -> str:
 
     elif b'http' in data:
         return 'URL'
+
+def decodeQRCode(filename: str) -> Optional[bytes]:
+    """Decode a QRCode from an image"""
+    data = decode(Image.open(filename))
+
+    # no QRCode found
+    if len(data) == 0:
+        return None
+    else:
+        return data[0].data
 
 
 #----- begin
