@@ -27,19 +27,19 @@ from PIL import Image
 def detectType(data: bytes) -> str:
     """Detect the proper type of the QRCode"""
 
-    if 'VCARD' in data:
+    if b'VCARD' in data:
         return 'VCARD'
 
-    elif 'tel:' in data:
+    elif b'tel:' in data:
         return 'PHONE'
 
-    elif 'mailto' in data:
+    elif b'mailto' in data:
         return 'EMAIL'
 
-    elif 'WIFI' in data:
+    elif b'WIFI' in data:
         return 'WIFI'
 
-    elif 'http' in data:
+    elif b'http' in data:
         return 'URL'
 
 
