@@ -15,10 +15,13 @@
 from __future__ import annotations
 from typing import Any, Optional
 
+import sys
+import pathlib
 import argparse
 
 from pyzbar.pyzbar import decode
 from PIL import Image
+
 
 #----- globals
 
@@ -61,3 +64,17 @@ parser.add_argument("--image", required=True, help="Input image filename")
 
 args = parser.parse_args()
 
+# check if the file exists
+if not pathlib.Path(args.image).exists():
+    print(f"Error: could not find image [{args.image}]")
+    sys.exit(1)
+
+# try to decode QRcode from this image
+data = decodeQRCode(args.image)
+if data is None:
+    print("Error: no QRCode has been found in the image.")
+    sys.exit(1)
+
+# retrieve the type of the QRCode
+qr_type = detectType(data)
+print(qr_type)
