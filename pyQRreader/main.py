@@ -9,7 +9,7 @@
 # @author	Sebastien LEGRAND
 # @license	Apache License 2.0
 #
-# @brief	Main entry point for pyQRCode
+# @brief	Main entry point for pyQRreader
 
 #----- imports
 from __future__ import annotations
@@ -22,8 +22,10 @@ import argparse
 from pyzbar.pyzbar import decode
 from PIL import Image
 
+from definitions import PluginManager, PluginTask
 
-#----- globals
+# register all the plugins
+import plugins
 
 
 #----- functions
@@ -31,19 +33,19 @@ def detectType(data: bytes) -> str:
     """Detect the proper type of the QRCode"""
 
     if b'VCARD' in data:
-        return 'VCARD'
+        return 'VCard'
 
     elif b'tel:' in data:
-        return 'PHONE'
+        return 'Phone'
 
     elif b'mailto' in data:
-        return 'EMAIL'
+        return 'Email'
 
     elif b'WIFI' in data:
-        return 'WIFI'
+        return 'Wifi'
 
     elif b'http' in data:
-        return 'URL'
+        return 'Url'
 
 def decodeQRCode(filename: str) -> Optional[bytes]:
     """Decode a QRCode from an image"""
@@ -57,6 +59,8 @@ def decodeQRCode(filename: str) -> Optional[bytes]:
 
 
 #----- begin
+# plugin manager
+manager = PluginManager()
 
 # argument parser
 parser = argparse.ArgumentParser(description="QRCode reader")
@@ -77,4 +81,8 @@ if data is None:
 
 # retrieve the type of the QRCode
 qr_type = detectType(data)
-print(qr_type)
+print(f"*** QRCode Type is {qr_type}")
+
+# instantiate the proper plugin
+plugin: PluginTask = manager.factory(qr_type)
+plugin.process(data)
