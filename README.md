@@ -6,30 +6,30 @@
 
 ## **Abstract**
 
-The goal of the Monthly Coding Challenge is to find, design and develop an idea in only one month.  
+Every month I select a subject (or a theme) I wish to work on and try to find projects that will improve my knowledge on it.  
+
 
 ## **The Game Plan**
 
-1. The challenge must be completed in one month and one month only.  
-If at the end of the month the project is not finished, so be it.  
-This force us to focus on what is only necessary and leave out the rest.
+1. Every projects must have a link to the monthly theme. They don't need to be very polished as long as the main concept is here.
 
 2. Any *crazy* idea is fine. We do not care if it's a viable idea or not.  
 The most important thing is to have fun and learn something in the process.
 
 3. Any programming language will do.  
-I'm planning to do Python, Rust and C++. Maybe NodeJS/Typescript as well.  
-That will be good to improve new language or refresh some old ones.
+This way we can refresh some old languages and learn new ones.
 
 
-## **The projects**
+## **The challenges**
 
-All the projects and a link to their respective directory in the repo will be listed here.  
+### **May 2022**
 
-| Year | Month | Project Name | Description | Language |
-| :-: | :-: | :-- | :-- | :-- |
-| 2022 | May | [pyTOTP](./pyTOTP/README.md) | A TOTP CLI manager | ![Python](https://img.shields.io/badge/Python-3.9.6-blue?style=flat-square)
-| 2022 | May | [pyQRCode](./pyQRCode/README.md) | Adventures in QRCode | ![Python](https://img.shields.io/badge/Python-3.9.6-blue?style=flat-square)
+| Project Name | Description | Language |
+| :-- | :-- | :-- |
+| [pyTOTP](./pyTOTP/) | A CLI for TOTP | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
+| [pyQRCode](./pyQRCode/) | QRCode generator | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
+| [pyQRreader](./pyQRreader/) | QRCode reader | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
+
 
 
 
