@@ -2,8 +2,8 @@
 
 //----- constants
 #define LED1 5
-#define LED2 6
-#define LED3 7
+#define LED2 4
+#define LED3 3
 #define ANIM_DELAY 1000
 
 //----- functions
