@@ -1,32 +1,37 @@
-int switchState;
-int previousState;
-int trigger;
-
 void setup() {
-  // setup the LEDS
+  // LED + LCD setups
   ledSetup();
+  lcdSetup();
 
-  // setup the switch
+  // switch setup
   pinMode(2, INPUT);
 
-  // read the switch
-  switchState = digitalRead(2);
-  previousState = switchState;
-  trigger = 0;
-
+  // initialize random generator
+  randomSeed(analogRead(0));
 }
 
 void loop() {
-  // read the switch state
-  switchState = digitalRead(2);
+  // print the invite to the user
+  lcdPrintInvite();
 
-  if (switchState != previousState) {
-    trigger = (trigger + 1) & 1;
+  // wait for the button to be pressed
+  int switchState = digitalRead(2);
+  while (switchState == LOW) {
+    delay(100);
+    switchState = digitalRead(2);
   }
 
-  if (trigger) {
-    ledAnimation();    
-  }
+  // start the LED animation
+  lcdPrintThinking();
+  ledAnimation();
 
-  previousState = switchState;
+  // get a random number [0, 19]
+  int index = random(0, 20);
+
+  // print the Magic8 answer
+  lcdPrintAnswer(index);
+
+  // wait 10s
+  delay(10000);
 }
+
