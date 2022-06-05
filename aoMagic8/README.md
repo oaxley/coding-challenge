@@ -9,14 +9,27 @@ This project aims at reproduce the behaviour of the famous Magic-8 ball with an 
 
 ## **Usage**
 
-Once the Arduino is powered on, make a wish, click on the small switch, the Magic-8 will start to think and once the LED is green, it will give you its answer.
+Power on the Arduino. It will welcome you with the message
+> Make a wish and  
+> push the button
 
+Once your wish is speak out loud, push the button and wait.  
+The Arduino will flash the LEDs while it thinks.  
+Once the thinking period is over, it will display its answer on the screen.
 
 ## **List of Materials**
 
-- Arduino Uno (Rev3)
-- LCD 16x2
-
+| Quantity | Description |
+| --- | --- |
+| 1 | Arduino Uno (Rev3) |
+| 1 | LCD 16x2 |
+| 3 | LED (Red/Yellow/Green) |
+| 3 | Resistor 220 Ohms |
+| 1 | Resistor 10 KOhms |
+| 1 | Pushbutton |
+| 1 | Potentiometer |
 
 
 ## **Schematics**
+
+![](./schematics.png)
