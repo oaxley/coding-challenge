@@ -22,7 +22,7 @@ This way we can refresh some old languages and learn new ones.
 
 ## **The challenges**
 
-### **May 2022**
+### **May 2022 : Adventure in QRCode**
 
 | Project Name | Description | Language |
 | :-- | :-- | :-- |
@@ -30,7 +30,11 @@ This way we can refresh some old languages and learn new ones.
 | [pyQRCode](./pyQRCode/) | QRCode generator | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
 | [pyQRreader](./pyQRreader/) | QRCode reader | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
 
+### **June 2022 : Arduino discovery**
 
+| Project Name | Description | Language |
+| :-- | :-- | :-- |
+| [aoMagic8](./aoMagic8/) | Predict (or not) your future with this Oracle | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
 
 
 ---
