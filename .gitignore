@@ -13,3 +13,4 @@
 # images except the one from documentation
 **/*.png
 !qrcode.png
+!schematics.png
