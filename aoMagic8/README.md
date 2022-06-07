@@ -24,8 +24,8 @@ Once the thinking period is over, it will display its answer on the screen.
 | 1 | Arduino Uno (Rev3) |
 | 1 | LCD 16x2 |
 | 3 | LED (Red/Yellow/Green) |
-| 3 | Resistor 220 Ohms |
-| 1 | Resistor 10 KOhms |
+| 4 | Resistor 220 Ohms |
+| 1 | Resistor 1 KOhms |
 | 1 | Pushbutton |
 | 1 | Potentiometer |
 
