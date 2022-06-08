@@ -26,15 +26,16 @@ This way we can refresh some old languages and learn new ones.
 
 | Project Name | Description | Language |
 | :-- | :-- | :-- |
-| [pyTOTP](./pyTOTP/) | A CLI for TOTP | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
-| [pyQRCode](./pyQRCode/) | QRCode generator | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
-| [pyQRreader](./pyQRreader/) | QRCode reader | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
+| [pyTOTP](./2205-May/pyTOTP/) | A CLI for TOTP | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
+| [pyQRCode](./2205-May/pyQRCode/) | QRCode generator | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
+| [pyQRreader](./2205-May/pyQRreader/) | QRCode reader | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
+
 
 ### **June 2022 : Arduino discovery**
 
 | Project Name | Description | Language |
 | :-- | :-- | :-- |
-| [aoMagic8](./aoMagic8/) | Predict (or not) your future with this Oracle | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
+| [aoMagic8](./2206-June/aoMagic8/) | Predict (or not) your future with this Oracle | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
 
 
 ---
