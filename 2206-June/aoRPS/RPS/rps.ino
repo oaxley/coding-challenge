@@ -50,7 +50,16 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7)
 
 // Arduino setup
 void setup() {
+    // LCD Setup
+    lcd.begin(16, 2);
 
+    // push buttons
+    pinMode(ROCK, INPUT);
+    pinMode(PAPER, INPUT);
+    pinMode(SCISSORS, INPUT);
+
+    // random generator
+    randomSeed(analogRead(0));
 }
 
 // Arduino main loop
