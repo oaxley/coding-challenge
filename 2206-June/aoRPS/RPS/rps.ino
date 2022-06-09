@@ -26,7 +26,7 @@ const int rs = 7,   // Register Select
           d7 = 12;  // Data-3
 
 // game choices
-const char* choices[] = { "Rock", "Paper", "Scissors" };
+const char* choices[] = { "Scissors", "Paper", "Rock" };
 const int ROCK = 5, PAPER = 4, SCISSORS = 3;
 
 // winning matrix
@@ -48,6 +48,34 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7)
 
 //----- functions
 
+// read the user input from the push buttons
+int readUserInput() {
+
+    lcd.clear();
+    lcd.print("Select your move");
+
+    int done = 0;
+    while (!done) {
+
+        // read all the buttons
+        for (i = 3; i < 6; i++) {
+            if (analogRead(i) != LOW) {
+                done = i;
+                break;
+            }
+        }
+
+        // wait before doing it again
+        delay(100);
+    }
+
+    lcd.setCursor(0, 1);
+    lcd.print(choices[i - 3]);
+    delay(2000);
+
+    return i;
+}
+
 // Arduino setup
 void setup() {
     // LCD Setup
@@ -64,5 +92,7 @@ void setup() {
 
 // Arduino main loop
 void loop() {
+    // wait for user input and print it
+    int usr_move = readUserInput();
 
 }
