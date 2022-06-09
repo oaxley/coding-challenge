@@ -25,6 +25,23 @@ const int rs = 7,   // Register Select
           d6 = 11,  // Data-2
           d7 = 12;  // Data-3
 
+// game choices
+const char* choices[] = { "Rock", "Paper", "Scissors" };
+const int ROCK = 5, PAPER = 4, SCISSORS = 3;
+
+// winning matrix
+// first dimension is the user game, second is the computer game
+// 0=draw game, +1=user wins, -1=computer wins
+const int win_matrix[3][3] = {
+    { 0, -1,  1},
+    { 1,  0, -1},
+    {-1.  1,  0}
+};
+
+// keep track of the scores
+int usr_wins = 0, com_wins = 0;
+
+
 // initialize the LCD
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7)
 
