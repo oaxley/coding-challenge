@@ -35,7 +35,7 @@ const int ROCK = 5, PAPER = 4, SCISSORS = 3;
 const int win_matrix[3][3] = {
     { 0, -1,  1},
     { 1,  0, -1},
-    {-1.  1,  0}
+    {-1,  1,  0}
 };
 
 // keep track of the scores
@@ -43,7 +43,7 @@ int usr_wins = 0, com_wins = 0;
 
 
 // initialize the LCD
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7)
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 
 //----- functions
@@ -58,8 +58,8 @@ int readUserInput() {
     while (!done) {
 
         // read all the buttons
-        for (i = 3; i < 6; i++) {
-            if (analogRead(i) != LOW) {
+        for (int i = 3; i < 6; i++) {
+            if (digitalRead(i) != LOW) {
                 done = i;
                 break;
             }
@@ -70,10 +70,27 @@ int readUserInput() {
     }
 
     lcd.setCursor(0, 1);
-    lcd.print(choices[i - 3]);
+    lcd.print(choices[done - 3]);
     delay(2000);
 
-    return i;
+    return done;
+}
+
+// computer input
+int readComInput() {
+
+    lcd.clear();
+    lcd.print("My move");
+    delay(1000);
+
+    // select a random number between 0 - 100 to increase randomness
+    int value = random(0, 100) % 3;
+
+    lcd.setCursor(0, 1);
+    lcd.print(choices[value]);
+    delay(2000);
+
+    return (value + 3);
 }
 
 // Arduino setup
@@ -94,5 +111,8 @@ void setup() {
 void loop() {
     // wait for user input and print it
     int usr_move = readUserInput();
+
+    // get computer move
+    int com_move = readComInput();
 
 }
