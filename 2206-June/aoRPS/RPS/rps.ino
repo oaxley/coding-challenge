@@ -33,9 +33,9 @@ const int ROCK = 5, PAPER = 4, SCISSORS = 3;
 // first dimension is the user game, second is the computer game
 // 0=draw game, +1=user wins, -1=computer wins
 const int win_matrix[3][3] = {
-    { 0, -1,  1},
-    { 1,  0, -1},
-    {-1,  1,  0}
+    { 0, +1, -1},
+    {-1,  0, +1},
+    {+1, -1,  0}
 };
 
 // keep track of the scores
@@ -54,13 +54,13 @@ int readUserInput() {
     lcd.clear();
     lcd.print("Select your move");
 
-    int done = 0;
-    while (!done) {
+    int done = -1;
+    while (done < 0) {
 
         // read all the buttons
         for (int i = 3; i < 6; i++) {
             if (digitalRead(i) != LOW) {
-                done = i;
+                done = i - 3;
                 break;
             }
         }
@@ -70,7 +70,7 @@ int readUserInput() {
     }
 
     lcd.setCursor(0, 1);
-    lcd.print(choices[done - 3]);
+    lcd.print(choices[done]);
     delay(2000);
 
     return done;
@@ -90,7 +90,45 @@ int readComInput() {
     lcd.print(choices[value]);
     delay(2000);
 
-    return (value + 3);
+    return value;
+}
+
+// check the winner
+void checkWinner(int usr_move, int com_move) {
+
+    lcd.clear();
+
+    int value = win_matrix[usr_move][com_move];
+    switch(value) {
+        case -1:
+            lcd.print("I Win!");
+            com_wins++;
+            break;
+        case 0 :
+            lcd.print("Draw Game!");
+            break;
+        case 1 :
+            lcd.print("You Win!");
+            usr_wins++;
+            break;
+    }
+
+    delay(2000);
+}
+
+// print scores
+void printScores() {
+    lcd.clear();
+    lcd.print("-- SCORES --");
+
+    lcd.setCursor(0, 1);
+    lcd.print("You:");
+    lcd.print(usr_wins);
+
+    lcd.print("   Me:");
+    lcd.print(com_wins);
+
+    delay(2000);
 }
 
 // Arduino setup
@@ -115,4 +153,9 @@ void loop() {
     // get computer move
     int com_move = readComInput();
 
+    // check the winner
+    checkWinner(usr_move, com_move);
+
+    // print scores
+    printScores();
 }
