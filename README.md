@@ -36,6 +36,7 @@ This way we can refresh some old languages and learn new ones.
 | Project Name | Description | Language |
 | :-- | :-- | :-- |
 | [aoMagic8](./2206-June/aoMagic8/) | Predict (or not) your future with this Oracle | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
+| [aoRPS](./2206-June/aoRPS/) | Rock, Paper, Scissors | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
 
 
 ---
