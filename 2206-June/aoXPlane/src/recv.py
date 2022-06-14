@@ -28,7 +28,11 @@ UDP_PORT = 35880
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind(('', UDP_PORT))
 
+old_data = b""
 while True:
     data, address = sock.recvfrom(1024)
-    print(f"Received {len(data)} bytes from {address}: {data.decode()}", file=sys.stderr)
+
+    if (data != old_data):
+        print(f"Received {len(data)} bytes from {address}: {data.decode()}", file=sys.stderr)
+        old_data = data
 
