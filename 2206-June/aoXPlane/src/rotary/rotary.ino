@@ -13,9 +13,9 @@
 //----- globals
 
 // Arduino PINs definition
-const int SW_PIN = 2;
-const int CLK_PIN = 3;
-const int DT_PIN = 4;
+const int SW_PIN = 4;
+const int CLK_PIN = 2;
+const int DT_PIN = 3;
 
 // counter
 int counter = 0;
@@ -35,6 +35,10 @@ void setup() {
     // encoder PIN
     pinMode(CLK_PIN, INPUT);
     pinMode(DT_PIN, INPUT);
+
+    // attach interrupt handler
+    attachInterrupt(digitalPinToInterrupt(CLK_PIN), isrHandler, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(DT_PIN), isrHandler, CHANGE);
 
     // switch
     pinMode(SW_PIN, INPUT_PULLUP);
@@ -70,28 +74,6 @@ void loop() {
 
 
     if (fsm_state == 1) {
-        // read the current value of CLK
-        curr_clk_state = digitalRead(CLK_PIN);
-
-        // if current != last, then know has been turned.
-        // only consider knob when CLK goes 0->1 to avoid double count effect
-        if ((curr_clk_state != last_clk_state) && (curr_clk_state == 1)) {
-            
-            // we need to determine which way the knob was turned
-            if (digitalRead(DT_PIN) != curr_clk_state) {
-                // Counter Clock-Wise
-                counter = counter - 1;
-            } else {
-                // Clock-Wise
-                counter = counter + 1;
-            }
-
-            Serial.print("Counter: ");
-            Serial.println(counter);
-        }
-
-        // keep track of last CLK value
-        last_clk_state = curr_clk_state;
 
         // read the switch value
         if (digitalRead(SW_PIN) == LOW) {
@@ -106,4 +88,30 @@ void loop() {
         // small delay to have smooth reading
         delay(1);
     }
+}
+
+// interrupt service routine
+void isrHandler() {
+    // read the current value of CLK
+    curr_clk_state = digitalRead(CLK_PIN);
+
+    // if current != last, then know has been turned.
+    // only consider knob when CLK goes 0->1 to avoid double count effect
+    if ((curr_clk_state != last_clk_state) && (curr_clk_state == 1)) {
+        
+        // we need to determine which way the knob was turned
+        if (digitalRead(DT_PIN) != curr_clk_state) {
+            // Counter Clock-Wise
+            counter = counter - 1;
+        } else {
+            // Clock-Wise
+            counter = counter + 1;
+        }
+
+        Serial.print("Counter: ");
+        Serial.println(counter);
+    }
+
+    // keep track of last CLK value
+    last_clk_state = curr_clk_state;
 }
