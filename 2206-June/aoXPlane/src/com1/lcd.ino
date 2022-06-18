@@ -39,3 +39,11 @@ void lcdPrintFrequency(int num, int fraq) {
     lcd.print(fraq);
     lcd.print(" MHz");
 }
+
+void lcdWelcome() {
+    lcd.clear();
+    lcd.print("Welcome to ");
+    lcd.setCursor(0, 1);
+    lcd.print("Arduino COM1");
+    delay(2000);
+}
