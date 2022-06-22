@@ -43,7 +43,7 @@ void loop() {
     // wait for the value from the Serial port
     if (fsm == FSM_STATE::BEGIN) {
         lcdWelcome();
-        Serial.println("Waiting for initial value from Simulator...");
+        Serial.println("INIT_VALUE");
 
         bool done = false;
         while(!done) {
@@ -53,8 +53,8 @@ void loop() {
 
                 // cast value to int
                 int value = init_value.toInt();
-                Serial.print("Initial value set to ");
-                Serial.println(value);
+                // Serial.print("Initial value set to ");
+                // Serial.println(value);
 
                 // setup the manager value
                 mgr.setValues(value);
