@@ -70,15 +70,24 @@ void loop() {
 
     // setup the encoder ISR
     if (fsm == FSM_STATE::SETUP_ENCODER) {
-        Serial.println("Attaching ISR to PIN 2,3");
         attachISR();
         fsm = FSM_STATE::RUNNING;
     }
 
     if (fsm == FSM_STATE::RUNNING) {
         // update LCD only when changes occur
-        if (mgr.hasChanged())
-            lcdPrintFrequency(mgr.number(), mgr.fraction());
+        if (mgr.hasChanged()) {
+            int number = mgr.number();
+            int fraction = mgr.fraction();
+
+            // print the values on the screen
+            lcdPrintFrequency(number, fraction);
+
+            // send the data on the Serial port
+            int value = (number * 100) + fraction;
+            Serial.print("DATA:");
+            Serial.println(value);
+        }
         
         readSwitch();
     }
