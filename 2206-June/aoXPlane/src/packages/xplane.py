@@ -62,7 +62,7 @@ class XPlaneCOM:
         self.sock.sendto(message, (self.udp_host, self.udp_port))
 
 
-    def getDREF(self, name: str) -> Optional[float]:
+    def getDREF(self, name: str) -> float:
         """Retrieve a DREF value from X-Plane"""
         # prepare the data
         command = b'RREF\x00'
