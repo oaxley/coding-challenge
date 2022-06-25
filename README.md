@@ -37,7 +37,7 @@ This way we can refresh some old languages and learn new ones.
 | :-- | :-- | :-- |
 | [aoMagic8](./2206-June/aoMagic8/) | Predict (or not) your future with this Oracle | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
 | [aoRPS](./2206-June/aoRPS/) | Rock, Paper, Scissors | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
-| [aoXPlane](./2206-June/aoXPlane/) | Arduino / X-Plane communicator | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
+| [aoXPlane](./2206-June/aoXPlane/) | Arduino / X-Plane communicator | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white) ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
 
 ---
 ## **License**
