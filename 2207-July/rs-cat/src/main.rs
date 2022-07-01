@@ -22,18 +22,51 @@ use clap::{Arg, App, crate_description};
 
 
 //----- functions
-fn read_file(filename: &str, numbers: bool) -> io::Result<()> {
-    let file = File::open(filename)?;
-    let reader = BufReader::new(file);
+fn process_file(filename: &str, numbers: bool, mut counter: u32) -> u32 {
+    if !Path::new(filename).exists() {
+        eprintln!("{}: No such file or directory", filename);
+        process::exit(1);
+    }
 
-    let mut counter = 1u32;
+    let file = File::open(filename).unwrap();
+    let reader = BufReader::new(file);
 
     for line in reader.lines() {
         if numbers {
-            print!("{:>5}\t", counter);
+            print!("{:>6}\t", counter);
         }
-        println!("{}", line?);
+
+        println!("{}", line.unwrap());
         counter += 1;
+    }
+
+    counter
+}
+
+fn process_stdin(numbers: bool, mut counter: u32) -> u32 {
+    let stdin = io::stdin();
+    let reader = stdin.lock();
+
+    for line in reader.lines() {
+        if numbers {
+            print!("{:>6}\t", counter);
+        }
+
+        println!("{}", line.unwrap());
+        counter += 1;
+    }
+
+    counter
+}
+
+fn process_entry(filename: &str, numbers: bool) -> io::Result<()> {
+    // line counter
+    let mut counter: u32 = 1;
+
+    if filename == "-" {
+        counter = process_stdin(numbers, counter);
+    } else {
+        counter = process_file(filename, numbers, counter);
     }
 
     Ok(())
@@ -61,17 +94,6 @@ fn main() {
     let filename = app.value_of("FILE").unwrap_or("-");
     let numbers: bool = app.contains_id("number");
 
-    // standard input
-    if filename == "-" {
-        read_file("-", numbers).unwrap();
-    } else {
-        // ensure the file exists
-        if Path::new(filename).exists() {
-            read_file(filename, numbers).unwrap();
-        } else {
-            eprintln!("Error: {} does not exist.", filename);
-            process::exit(1);
-        }
-    }
+    process_entry(filename, numbers).unwrap();
 
 }
