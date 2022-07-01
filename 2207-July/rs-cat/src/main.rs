@@ -18,69 +18,70 @@ use std::fs::File;
 use std::path::Path;
 use std::io::{self, prelude::*, BufReader};
 
-use clap::{Arg, App, crate_description};
+use clap::{Arg, crate_description, Command};
 
 
-//----- functions
-fn process_file(filename: &str, numbers: bool, mut counter: u32) -> u32 {
-    if !Path::new(filename).exists() {
-        eprintln!("{}: No such file or directory", filename);
-        process::exit(1);
+//----- class
+pub struct FileProcessor {
+    counter: u32,
+    numbers: bool
+}
+
+impl FileProcessor {
+    // constructor
+    pub fn new(numbers: bool) -> FileProcessor {
+        FileProcessor {
+            counter: 1,
+            numbers:  numbers
+        }
     }
 
-    let file = File::open(filename).unwrap();
-    let reader = BufReader::new(file);
+    // print the line with the counter and increment it
+    fn print_line(&mut self, line: String) {
+        if self.numbers {
+            print!("{:>6}\t", self.counter);
+        }
+        println!("{line}");
+        self.counter += 1;
+    }
 
-    for line in reader.lines() {
-        if numbers {
-            print!("{:>6}\t", counter);
+    // process a file
+    pub fn process_file(&mut self, filename: &str) {
+        if !Path::new(filename).exists() {
+            eprintln!("{filename}: No such file or directory");
+            process::exit(1);
         }
 
-        println!("{}", line.unwrap());
-        counter += 1;
-    }
+        let file = File::open(filename).unwrap();
+        let reader = BufReader::new(file);
 
-    counter
-}
-
-fn process_stdin(numbers: bool, mut counter: u32) -> u32 {
-    let stdin = io::stdin();
-    let reader = stdin.lock();
-
-    for line in reader.lines() {
-        if numbers {
-            print!("{:>6}\t", counter);
+        for line in reader.lines() {
+            self.print_line(line.unwrap());
         }
-
-        println!("{}", line.unwrap());
-        counter += 1;
     }
 
-    counter
-}
+    // process stdin
+    pub fn process_stdin(&mut self) {
+        let stdin = io::stdin();
+        let stdin = stdin.lock();
 
-fn process_entry(filename: &str, numbers: bool) -> io::Result<()> {
-    // line counter
-    let mut counter: u32 = 1;
-
-    if filename == "-" {
-        counter = process_stdin(numbers, counter);
-    } else {
-        counter = process_file(filename, numbers, counter);
+        for line in stdin.lines() {
+            self.print_line(line.unwrap());
+        }
     }
 
-    Ok(())
 }
+
 
 //----- main entry point
 fn main() {
+
     // read the command line arguments
-    let app = App::new("rs-cat")
-                    //.version(crate_version!())
-                    //.author(crate_authors!())
+    let app = Command::new("rs-cat")
                     .about(crate_description!())
 
                     .arg(Arg::with_name("FILE")
+                        .multiple_values(true)
                         .help("With no FILE, or when FILE is -, read standard input."))
 
                     .arg(Arg::with_name("number")
@@ -90,10 +91,23 @@ fn main() {
 
                     .get_matches();
 
-    // retrieve the arguments
-    let filename = app.value_of("FILE").unwrap_or("-");
-    let numbers: bool = app.contains_id("number");
+    // create the FileProcessor instance
+    let mut obj = FileProcessor::new(app.contains_id("number"));
 
-    process_entry(filename, numbers).unwrap();
+    // process input(s)
+    let values = app.get_many::<String>("FILE");
+    match values {
+        None => obj.process_stdin(),
+        Some(files) => {
+                for file in files {
+                    if file == "-" {
+                        obj.process_stdin()
+                    } else {
+                        obj.process_file(file)
+                    }
+                }
+
+            }
+    }
 
 }

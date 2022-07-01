@@ -2,7 +2,6 @@
 name = "rs-cat"
 version = "0.1.0"
 edition = "2021"
-authors = [ "Sebastien LEGRAND <oaxley@gmail.com>" ]
 
 description = "Concatenate FILE(s) to standard output."
 
