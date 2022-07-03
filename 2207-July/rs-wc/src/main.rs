@@ -23,8 +23,8 @@ use clap::{Arg, crate_description, Command};
 
 //----- class
 pub struct FileCounter {
-    line_counter: u64,
-    char_counter: u64,
+    line_counter: usize,
+    byte_counter: usize,
 }
 
 impl FileCounter {
@@ -32,12 +32,32 @@ impl FileCounter {
     pub fn new() -> FileCounter {
         FileCounter {
             line_counter: 0,
-            char_counter: 0,
+            byte_counter: 0,
         }
     }
 
+    // process stdin
     pub fn process_stdin(&mut self) {
-        todo!()
+        let mut stdin = io::stdin().lock();
+
+        let mut lines: usize = 0;
+        let mut bytes: usize = 0;
+
+        let mut buffer = String::new();
+        loop {
+            let num_bytes = stdin.read_line(&mut buffer).unwrap();
+
+            if num_bytes == 0 {
+                break;
+            }
+
+            bytes += num_bytes;
+            lines += 1;
+        }
+
+        println!("{:>4} {:>4}", lines, bytes);
+        self.line_counter += lines;
+        self.byte_counter += bytes;
     }
 
     pub fn process_file(&mut self, filename: &str) {
@@ -45,7 +65,7 @@ impl FileCounter {
     }
 
     pub fn print_total(self) {
-        println!("{:>4} {:>4} total", self.line_counter, self.char_counter);
+        println!("{:>4} {:>4} total", self.line_counter, self.byte_counter);
     }
 }
 
