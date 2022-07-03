@@ -1,5 +1,6 @@
 [workspace]
 
 members = [
-    "rs-cat"
+    "rs-cat",
+    "rs-wc"
 ]
