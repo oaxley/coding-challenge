@@ -61,7 +61,33 @@ impl FileCounter {
     }
 
     pub fn process_file(&mut self, filename: &str) {
-        todo!()
+        let mut lines: usize = 0;
+        let mut bytes: usize = 0;
+        let mut buffer = String::new();
+
+        if !Path::new(filename).exists() {
+            eprintln!("{filename}: No such file or directory");
+            process::exit(1);
+        }
+
+        let file = File::open(filename).unwrap();
+        let mut reader = BufReader::new(file);
+
+        loop {
+            let num_bytes = reader.read_line(&mut buffer).unwrap();
+
+            if num_bytes == 0 {
+                break;
+            }
+
+            bytes += num_bytes;
+            lines += 1;
+        }
+
+        println!("{:>4} {:>4} {filename}", lines, bytes);
+        self.line_counter += lines;
+        self.byte_counter += bytes;
+
     }
 
     pub fn print_total(self) {
