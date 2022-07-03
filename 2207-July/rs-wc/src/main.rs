@@ -25,6 +25,9 @@ use clap::{Arg, crate_description, Command};
 pub struct FileCounter {
     line_counter: usize,
     byte_counter: usize,
+
+    print_bytes: bool,
+    print_lines: bool,
 }
 
 impl FileCounter {
@@ -33,7 +36,34 @@ impl FileCounter {
         FileCounter {
             line_counter: 0,
             byte_counter: 0,
+            print_bytes: false,
+            print_lines: false
         }
+    }
+
+    // set the flags
+    pub fn activate_bytes(&mut self) {
+        self.print_bytes = true;
+    }
+
+    pub fn activate_lines(&mut self) {
+        self.print_lines = true;
+    }
+
+    // print values depending on the flags
+    fn print_values(&self, bytes: usize, lines: usize) {
+        if self.print_lines {
+            print!("{:>4} ", lines);
+        }
+
+        if self.print_bytes {
+            print!("{:>4} ", bytes);
+        }
+    }
+
+    pub fn print_total(self) {
+        self.print_values(self.byte_counter, self.line_counter);
+        println!("total");
     }
 
     // process stdin
@@ -55,7 +85,11 @@ impl FileCounter {
             lines += 1;
         }
 
-        println!("{:>4} {:>4}", lines, bytes);
+        // print intermediate values
+        self.print_values(bytes, lines);
+        println!("");
+
+        // increment global counters
         self.line_counter += lines;
         self.byte_counter += bytes;
     }
@@ -84,15 +118,16 @@ impl FileCounter {
             lines += 1;
         }
 
-        println!("{:>4} {:>4} {filename}", lines, bytes);
+        // print intermediate values
+        self.print_values(bytes, lines);
+        println!("{filename}");
+
+        // increment global counters
         self.line_counter += lines;
         self.byte_counter += bytes;
 
     }
 
-    pub fn print_total(self) {
-        println!("{:>4} {:>4} total", self.line_counter, self.byte_counter);
-    }
 }
 
 
@@ -121,6 +156,15 @@ fn main() {
 
     // create the FileCounter instance
     let mut obj = FileCounter::new();
+
+    // process flags
+    if app.contains_id("lines") {
+        obj.activate_lines();
+    }
+
+    if app.contains_id("chars") {
+        obj.activate_bytes();
+    }
 
     // process the input
     let values = app.get_many::<String>("FILE");
