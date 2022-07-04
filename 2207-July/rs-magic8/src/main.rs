@@ -44,12 +44,36 @@ static RESPONSES: [&str; 20] = [
 
 //----- functions
 fn shake_the_ball() {
-    todo!();
+    println!("Magic 8 ball Oracle");
+
+    // mainloop
+    loop {
+        // get the input from the user
+        let question = query_user();
+
+        if question == "q" {
+            break;
+        } else if question.is_empty() {
+            println!("No question, no answer!");
+            continue;
+        }
+    }
+
+    println!("Bye.");
 }
 
+
+// ask the user for his question
 fn query_user() -> String {
-    todo!()
+    let mut question = String::new();
+
+    println!("Please enter your question (q to quit):");
+    io::stdin().read_line(&mut question);
+
+    // remove extra spaces and set everything to lowercase
+    question.trim().to_lowercase()
 }
+
 
 //----- main entry point
 fn main() {
