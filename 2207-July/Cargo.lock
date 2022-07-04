@@ -163,6 +163,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "rs-magic8"
+version = "0.1.0"
+
+[[package]]
 name = "rs-wc"
 version = "0.1.0"
 dependencies = [
