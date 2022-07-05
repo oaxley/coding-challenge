@@ -14,6 +14,9 @@
 
 //----- imports
 use std::io::{self, Write};
+use std::{thread, time};
+use rand::seq::SliceRandom;
+
 
 //----- globals
 
@@ -41,6 +44,9 @@ static RESPONSES: [&str; 20] = [
     "Very doubtful.",
 ];
 
+// thinking time
+static THINK_TIME: u64 = 1000;
+
 
 //----- functions
 fn shake_the_ball() {
@@ -57,6 +63,25 @@ fn shake_the_ball() {
             println!("No question, no answer!");
             continue;
         }
+
+        // thinking time (output is buffered so we need to flush it everytime)
+        print!("Thinking ");
+        io::stdout().flush().unwrap();
+
+        for _ in 0..3 {
+            print!(".");
+            io::stdout().flush().unwrap();
+            thread::sleep(time::Duration::from_millis(THINK_TIME));
+        }
+        println!("");
+
+        // get a random answer
+        let mut rng = rand::thread_rng();
+        let response = RESPONSES.choose(&mut rng).unwrap();
+
+        // print it
+        println!("Magic-8 says: {response}");
+        println!();
     }
 
     println!("Bye.");
@@ -68,7 +93,7 @@ fn query_user() -> String {
     let mut question = String::new();
 
     println!("Please enter your question (q to quit):");
-    io::stdin().read_line(&mut question);
+    io::stdin().read_line(&mut question).unwrap();
 
     // remove extra spaces and set everything to lowercase
     question.trim().to_lowercase()
