@@ -13,14 +13,31 @@
  */
 
 //----- imports
-use std::{io::{self, Write}, str::FromStr};
+
 
 mod rps;
 use rps::RPS;
 
 //----- functions
 fn play() {
-    let game = RPS::random();
+    // scores
+    let mut usr_score = 0;
+    let mut com_score = 0;
+
+    // mainloop
+    loop {
+
+        // player move
+        let mut usr = RPS::random();
+        if !usr.query_user() {
+            println!("Invalid choice! Please Try again.");
+            continue;
+        }
+
+        // get the computer move
+        let mut com = RPS::random();
+
+    }
 
 }
 
