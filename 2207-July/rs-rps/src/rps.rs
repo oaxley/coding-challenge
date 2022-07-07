@@ -15,6 +15,7 @@
 //----- imports
 use std::io::{self, Write};
 use std::process;
+use std::fmt;
 use rand::seq::SliceRandom;
 
 
@@ -73,4 +74,10 @@ impl RPS {
         }
     }
 
+}
+
+impl fmt::Display for RPS {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.selection)
+    }
 }

@@ -37,6 +37,11 @@ fn play() {
         // get the computer move
         let mut com = RPS::random();
 
+        // print choices
+        println!("You: {} \t Computer: {}", usr, com);
+
+        // check the results
+
     }
 
 }
