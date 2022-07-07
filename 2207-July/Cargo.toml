@@ -3,5 +3,6 @@
 members = [
     "rs-cat",
     "rs-wc",
-    "rs-magic8"
+    "rs-magic8",
+    "rs-rps"
 ]
