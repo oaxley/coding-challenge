@@ -13,12 +13,15 @@
  */
 
 //----- imports
-use std::io::{self, Write};
+use std::{io::{self, Write}, str::FromStr};
 
+mod rps;
+use rps::RPS;
 
 //----- functions
 fn play() {
-    todo!();
+    let game = RPS::random();
+
 }
 
 
