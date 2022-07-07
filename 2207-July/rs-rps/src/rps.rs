@@ -16,6 +16,7 @@
 use std::io::{self, Write};
 use std::process;
 use std::fmt;
+use std::cmp::{Ordering, Ord};
 use rand::seq::SliceRandom;
 
 
@@ -26,6 +27,7 @@ static SCISSORS: &str = "scissors";
 
 
 //----- class
+#[derive(Eq)]
 pub struct RPS {
     selection: String
 }
@@ -79,5 +81,58 @@ impl RPS {
 impl fmt::Display for RPS {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.selection)
+    }
+}
+
+// ensure we can do (x == y) and (x != y) with RPS
+impl PartialEq for RPS {
+    fn eq(&self, other: &Self) -> bool {
+        self.selection == other.selection
+    }
+}
+
+// ensure we can do <, <=, >, >= with RPS
+impl PartialOrd for RPS {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+// Ordering needs Ord traits
+impl Ord for RPS {
+    fn cmp(&self, other: &Self) -> Ordering {
+        // implementation of the RPS rules
+        if self.selection == ROCK {
+            if other.selection == ROCK {            // ROCK vs ROCK
+                return Ordering::Equal;
+            } else if self.selection == PAPER {     // ROCK < PAPER (PAPER wins)
+                return Ordering::Less;
+            } else if other.selection == SCISSORS { // ROCK > SCISSORS (ROCK wins)
+                return Ordering::Greater;
+            }
+        }
+
+        if self.selection == PAPER {
+            if other.selection == PAPER {           // PAPER vs PAPER
+                return Ordering::Equal;
+            } else if other.selection == SCISSORS { // PAPER < SCISSORS (SCISSORS wins)
+                return Ordering::Less;
+            } else if other.selection == ROCK {     // PAPER > ROCK (PAPER wins)
+                return Ordering::Greater;
+            }
+        }
+
+        if self.selection == SCISSORS {
+            if other.selection == SCISSORS {        // SCISSORS vs SCISSORS
+                return Ordering::Equal;
+            } else if other.selection == ROCK {     // SCISSORS < ROCK (ROCK wins)
+                return Ordering::Less;
+            } else if other.selection == PAPER {    // SCISSORS > PAPER (SCISSORS wins)
+                return Ordering::Greater;
+            }
+        }
+
+        // default value (never reached)
+        return Ordering::Equal;
     }
 }
