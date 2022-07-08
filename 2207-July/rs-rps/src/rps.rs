@@ -105,7 +105,7 @@ impl Ord for RPS {
         if self.selection == ROCK {
             if other.selection == ROCK {            // ROCK vs ROCK
                 return Ordering::Equal;
-            } else if self.selection == PAPER {     // ROCK < PAPER (PAPER wins)
+            } else if other.selection == PAPER {     // ROCK < PAPER (PAPER wins)
                 return Ordering::Less;
             } else if other.selection == SCISSORS { // ROCK > SCISSORS (ROCK wins)
                 return Ordering::Greater;

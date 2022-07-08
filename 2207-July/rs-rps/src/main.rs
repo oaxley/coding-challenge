@@ -35,13 +35,25 @@ fn play() {
         }
 
         // get the computer move
-        let mut com = RPS::random();
+        let com = RPS::random();
 
         // print choices
         println!("You: {} \t Computer: {}", usr, com);
 
         // check the results
+        if usr > com {
+            println!("You wins!");
+            usr_score += 1;
+        } else if usr < com {
+            println!("Computer wins!");
+            com_score += 1;
+        } else {
+            println!("Draw game!");
+        }
 
+        // print the score
+        print!("Scores --- ");
+        println!("Computer: {} \t Player: {}", com_score, usr_score);
     }
 
 }
