@@ -39,6 +39,17 @@ This way we can refresh some old languages and learn new ones.
 | [aoRPS](./2206-June/aoRPS/) | Rock, Paper, Scissors | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
 | [aoXPlane](./2206-June/aoXPlane/) | Arduino / X-Plane communicator | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white) ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
 
+
+### **July 2022 : Let's get Rusty**
+
+| Project Name | Description | Language |
+| :-- | :-- | :-- |
+| [rs-cat](./2207-July/rs-cat/) | Clone of the 'cat' unix tool | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
+| [rs-wc](./2207-July/rs-wc/) | Clone of the 'wc' unix tool | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
+| [rs-magic8](./2207-July/rs-magic8/) | Magic-8 ball, again | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
+| [rs-rps](./2207-July/rs-rps/) | Rock, Paper, Scissors ... | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
+
+
 ---
 ## **License**
 
