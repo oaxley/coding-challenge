@@ -35,14 +35,14 @@ pub struct RPS {
 impl RPS {
 
     // constructor from a user String
-    pub fn new(choice: String) -> Option<RPS> {
-        if [ROCK, PAPER, SCISSORS].contains(&choice.as_ref()) {
-            return Some(RPS { selection: choice });
-        }
+    // pub fn new(choice: String) -> Option<RPS> {
+    //     if [ROCK, PAPER, SCISSORS].contains(&choice.as_ref()) {
+    //         return Some(RPS { selection: choice });
+    //     }
 
-        // unable to determine user choice
-        None
-    }
+    //     // unable to determine user choice
+    //     None
+    // }
 
     // select a random choice
     pub fn random() -> RPS {
