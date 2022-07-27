@@ -36,15 +36,6 @@ pub fn command_line<'a>() -> Command<'a> {
                 )
 
                 .subcommand(
-                    Command::new("print")
-                        .about("Print content of the store")
-                        .arg(arg!(<NAME> "store name"))
-                        .arg_required_else_help(true)
-                        .arg(arg!(-r --regex <REGEX> "Regex to select particular URLs, Descriptions or Tags").required(false))
-                        .arg(arg!(-f --format <FORMAT> "Optional output format").required(false))
-                )
-
-                .subcommand(
                     Command::new("export")
                         .about("Export the content of the store")
                         .arg(arg!(<NAME> "store name"))
