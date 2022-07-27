@@ -18,10 +18,15 @@ use crate::utils as utils;
 
 //----- globals
 // add a new url
-const SQLITE_ADD_URL: &str = "
+const SQLITE_INSERT_URL: &str = "
     INSERT INTO bookmarks
     (url, description, tags)
     VALUES (?1, ?2, ?3)";
+
+// delete a URL
+const SQLITE_DELETE_URL: &str = "
+    DELETE FROM bookmarks
+    WHERE id=(?1)";
 
 
 //----- functions
@@ -68,7 +73,32 @@ pub fn create(url: Option<&String>, descr: Option<&String>, tag_vector: Vec<&Str
     // create the connection to the DB
     match database::connect(&db_name) {
         Some(db) => {
-            match db.execute(SQLITE_ADD_URL, (&url, &description, &tags)) {
+            match db.execute(SQLITE_INSERT_URL, (&url, &description, &tags)) {
+                Ok(_) => return true,
+                Err(_) => return false
+            }
+        },
+        None => return false
+    }
+}
+
+// delete a URL
+pub fn delete(id: Option<&String>, store: Option<&String>) -> bool {
+
+    // retrieve the database name either from arguments or environment
+    let db_name: String = utils::get_store_name(store);
+    if db_name.is_empty() {
+        eprintln!("Error: unable to determine the database name!");
+        return false;
+    }
+
+    // retrieve the id
+    let id = get_string(id);
+
+    // create the connection to the DB
+    match database::connect(&db_name) {
+        Some(db) => {
+            match db.execute(SQLITE_DELETE_URL, (&id,)) {
                 Ok(_) => return true,
                 Err(_) => return false
             }
