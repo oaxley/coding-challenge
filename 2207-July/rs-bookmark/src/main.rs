@@ -94,7 +94,10 @@ fn main() {
                 }
                 Some(("update", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);
-                    println!("{}", params);
+                    match url::update(params) {
+                        true => success("URL has been updated."),
+                        false => failure("Error: unable to update the URL.")
+                    }
                 }
                 Some(("print", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);
