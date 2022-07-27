@@ -13,20 +13,12 @@
  */
 
 //----- imports
-use crate::database as database;
-use crate::utils as utils;
 
-//----- globals
-// add a new url
-const SQLITE_INSERT_URL: &str = "
-    INSERT INTO bookmarks
-    (url, description, tags)
-    VALUES (?1, ?2, ?3)";
 
-// delete a URL
-const SQLITE_DELETE_URL: &str = "
-    DELETE FROM bookmarks
-    WHERE id=(?1)";
+//----- modules
+mod create;
+mod update;
+mod delete;
 
 
 //----- functions
@@ -70,66 +62,8 @@ fn get_tags(tags: Vec<&String>) -> String {
     value
 }
 
-/* create a new URL in the database
- *
- * Args:
- *      The parameters for the function extracted from the command line
- *
- * Returns:
- *      true if the creation was successful
- */
-pub fn create(params: utils::Params) -> bool {
 
-    // retrieve the database name either from arguments or environment
-    let db_name: String = utils::get_store_name(params.1);
-    if db_name.is_empty() {
-        eprintln!("Error: unable to determine the database name!");
-        return false;
-    }
-
-    // retrive the url, description & tags
-    let url = get_string(params.2);
-    let description = get_string(params.3);
-    let tags = get_tags(params.4);
-
-    // create the connection to the DB
-    match database::connect(&db_name) {
-        Some(db) => {
-            match db.execute(SQLITE_INSERT_URL, (&url, &description, &tags)) {
-                Ok(_) => return true,
-                Err(_) => return false
-            }
-        },
-        None => return false
-    }
-}
-
-// update an URL
-pub fn update(id: Option<&String>, url: Option<&String>, descr: Option<&String>, tag_vector: Vec<&String>, store: Option<&String>) -> bool {
-    false
-}
-
-// delete an URL
-pub fn delete(params: utils::Params) -> bool {
-
-    // retrieve the database name either from arguments or environment
-    let db_name: String = utils::get_store_name(params.1);
-    if db_name.is_empty() {
-        eprintln!("Error: unable to determine the database name!");
-        return false;
-    }
-
-    // retrieve the id
-    let id = get_string(params.0);
-
-    // create the connection to the DB
-    match database::connect(&db_name) {
-        Some(db) => {
-            match db.execute(SQLITE_DELETE_URL, (&id,)) {
-                Ok(_) => return true,
-                Err(_) => return false
-            }
-        },
-        None => return false
-    }
-}
+//----- exports
+pub use create::create as create;
+pub use update::update as update;
+pub use delete::delete as delete;
