@@ -31,7 +31,14 @@ const SQLITE_DELETE_URL: &str = "
 
 //----- functions
 
-// retrieve a string from an Option<&String>
+/* retrieve a string from an Option<&String>
+ *
+ * Args:
+ *      option: the Option<&String> to get the value from
+ *
+ * Returns:
+ *      The String if it's defined in the option, otherwise ""
+ */
 fn get_string(option: Option<&String>) -> String {
     if let Some(value) = option {
         return value.to_string();
@@ -40,7 +47,15 @@ fn get_string(option: Option<&String>) -> String {
     }
 }
 
-// create a string from a vector of tags
+/* create a string from a vector of tags
+ *
+ * Args:
+ *      tags: a vector of String
+ *
+ * Returns:
+ *      A string with all the element of the vector concatenate with ','.
+ *      Returns an empty string if no tags are defined.
+ */
 fn get_tags(tags: Vec<&String>) -> String {
     let mut value = String::from("");
     for tag in tags {
@@ -55,20 +70,27 @@ fn get_tags(tags: Vec<&String>) -> String {
     value
 }
 
-// create a new URL in the database
-pub fn create(url: Option<&String>, descr: Option<&String>, tag_vector: Vec<&String>, store: Option<&String>) -> bool {
+/* create a new URL in the database
+ *
+ * Args:
+ *      The parameters for the function extracted from the command line
+ *
+ * Returns:
+ *      true if the creation was successful
+ */
+pub fn create(params: utils::Params) -> bool {
 
     // retrieve the database name either from arguments or environment
-    let db_name: String = utils::get_store_name(store);
+    let db_name: String = utils::get_store_name(params.1);
     if db_name.is_empty() {
         eprintln!("Error: unable to determine the database name!");
         return false;
     }
 
     // retrive the url, description & tags
-    let url = get_string(url);
-    let description = get_string(descr);
-    let tags = get_tags(tag_vector);
+    let url = get_string(params.2);
+    let description = get_string(params.3);
+    let tags = get_tags(params.4);
 
     // create the connection to the DB
     match database::connect(&db_name) {
@@ -82,7 +104,12 @@ pub fn create(url: Option<&String>, descr: Option<&String>, tag_vector: Vec<&Str
     }
 }
 
-// delete a URL
+// update an URL
+pub fn update(id: Option<&String>, url: Option<&String>, descr: Option<&String>, tag_vector: Vec<&String>, store: Option<&String>) -> bool {
+    false
+}
+
+// delete an URL
 pub fn delete(id: Option<&String>, store: Option<&String>) -> bool {
 
     // retrieve the database name either from arguments or environment

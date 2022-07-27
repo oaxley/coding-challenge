@@ -13,7 +13,17 @@
  */
 
 //----- imports
+use std::process;
+
+//----- modules declaration
 mod cli;
+mod database;
+mod store;
+mod url;
+mod utils;
+
+
+//----- functions
 
 
 //----- main entry point
@@ -26,36 +36,31 @@ fn main() {
         Some(("store", sub_matches)) => {
             match sub_matches.subcommand() {
                 Some(("new", sub_matches)) => {
-                    let store_name = sub_matches.get_one::<String>("NAME");
-                    println!("Store name = {:?}", store_name);
-                }
-                Some(("print", sub_matches)) => {
-                    let store_name = sub_matches.get_one::<String>("NAME");
-                    let regex = sub_matches.get_one::<String>("regex");
-                    let format = sub_matches.get_one::<String>("format");
 
-                    println!("Store name = {:?}", store_name);
-                    println!("Regex = {:?}", regex);
-                    println!("Format = {:?}", format);
+                    let params = utils::retrieve_params(sub_matches);
+                    println!("{}", params);
+
+                    // if let Some(store) = sub_matches.get_one::<String>("NAME") {
+                    //     if store::create(store) {
+                    //         println!("Database [{}] has been created successfully.", store);
+                    //         process::exit(0);
+                    //     } else {
+                    //         eprintln!("Error: unable to create database [{}]!", store);
+                    //         process::exit(1);
+                    //     }
+                    // }
                 }
+
                 Some(("export", sub_matches)) => {
-                    let store_name = sub_matches.get_one::<String>("NAME");
-                    let regex = sub_matches.get_one::<String>("regex");
-                    let format = sub_matches.get_one::<String>("format");
-
-                    println!("Store name = {:?}", store_name);
-                    println!("Regex = {:?}", regex);
-                    println!("Format = {:?}", format);
+                    let params = utils::retrieve_params(sub_matches);
+                    println!("{}", params);
                 }
+
                 Some(("test", sub_matches)) => {
-                    let store_name = sub_matches.get_one::<String>("NAME");
-                    let regex = sub_matches.get_one::<String>("regex");
-                    let format = sub_matches.get_one::<String>("format");
-
-                    println!("Store name = {:?}", store_name);
-                    println!("Regex = {:?}", regex);
-                    println!("Format = {:?}", format);
+                    let params = utils::retrieve_params(sub_matches);
+                    println!("{}", params);
                 }
+
                 _ => cli::command_line().print_help().unwrap()
             }
         }
@@ -63,72 +68,48 @@ fn main() {
         Some(("url", sub_matches)) => {
             match sub_matches.subcommand() {
                 Some(("new", sub_matches)) => {
-                    let url = sub_matches.get_one::<String>("URL");
-                    let descr = sub_matches.get_one::<String>("descr");
-                    let store = sub_matches.get_one::<String>("store");
+                    let params = utils::retrieve_params(sub_matches);
+                    println!("{}", params);
 
-                    let tags = sub_matches
-                        .get_many::<String>("tags")
-                        .into_iter()
-                        .flatten()
-                        .collect::<Vec<_>>();
+                    // retrieve the parameters
+                    // let values = retrieve_params(sub_matches);
 
-                    println!("URL = {:?}", url);
-                    println!("Description = {:?}", descr);
-                    println!("Tags = {:?}", tags);
-                    println!("Store = {:?}", store);
+                    // create the URL
+                    // if url::create(values.0, values.1, values.2, values.3) {
+                    //     println!("URL has been created.");
+                    //     process::exit(0);
+                    // } else {
+                    //     eprintln!("Error: unable to create the URL.");
+                    //     process::exit(1);
+                    // }
                 }
                 Some(("update", sub_matches)) => {
-                    let id = sub_matches.get_one::<String>("ID");
-                    let url = sub_matches.get_one::<String>("url");
-                    let descr = sub_matches.get_one::<String>("descr");
-                    let store = sub_matches.get_one::<String>("store");
-
-                    let tags = sub_matches
-                        .get_many::<String>("tags")
-                        .into_iter()
-                        .flatten()
-                        .collect::<Vec<_>>();
-
-                    println!("ID = {:?}", id);
-                    println!("URL = {:?}", url);
-                    println!("Description = {:?}", descr);
-                    println!("Tags = {:?}", tags);
-                    println!("Store = {:?}", store);
+                    let params = utils::retrieve_params(sub_matches);
+                    println!("{}", params);
                 }
                 Some(("print", sub_matches)) => {
-                    let id = sub_matches.get_one::<String>("ID");
-                    let format = sub_matches.get_one::<String>("format");
-                    let store = sub_matches.get_one::<String>("store");
-
-                    println!("ID = {:?}", id);
-                    println!("Format = {:?}", format);
-                    println!("Store = {:?}", store);
+                    let params = utils::retrieve_params(sub_matches);
+                    println!("{}", params);
                 }
                 Some(("delete", sub_matches)) => {
-                    let id = sub_matches.get_one::<String>("ID");
-                    let store = sub_matches.get_one::<String>("store");
+                    let params = utils::retrieve_params(sub_matches);
+                    println!("{}", params);
 
-                    println!("ID = {:?}", id);
-                    println!("Store = {:?}", store);
+
+                    // let id = sub_matches.get_one::<String>("ID");
+                    // let store = sub_matches.get_one::<String>("store");
+
+                    // if url::delete(id, store) {
+                    //     println!("URL has been deleted.");
+                    //     process::exit(0);
+                    // } else {
+                    //     println!("Error: unable to delete the URL");
+                    //     process::exit(1);
+                    // }
                 }
                 Some(("search", sub_matches)) => {
-                    let url = sub_matches.get_one::<String>("url");
-                    let descr = sub_matches.get_one::<String>("descr");
-                    let format = sub_matches.get_one::<String>("format");
-                    let store = sub_matches.get_one::<String>("store");
-
-                    let tags = sub_matches
-                        .get_many::<String>("tags")
-                        .into_iter()
-                        .flatten()
-                        .collect::<Vec<_>>();
-
-                    println!("URL = {:?}", url);
-                    println!("Description = {:?}", descr);
-                    println!("Tags = {:?}", tags);
-                    println!("Format = {:?}", format);
-                    println!("Store = {:?}", store);
+                    let params = utils::retrieve_params(sub_matches);
+                    println!("{}", params);
                 }
                 _ => cli::command_line().print_help().unwrap()
             }

@@ -31,14 +31,14 @@ pub fn command_line<'a>() -> Command<'a> {
                 .subcommand(
                     Command::new("new")
                         .about("Create a new store")
-                        .arg(arg!(<NAME> "store name"))
+                        .arg(arg!(<store> "store name"))
                         .arg_required_else_help(true)
                 )
 
                 .subcommand(
                     Command::new("export")
                         .about("Export the content of the store")
-                        .arg(arg!(<NAME> "store name"))
+                        .arg(arg!(<store> "store name"))
                         .arg_required_else_help(true)
                         .arg(arg!(-r --regex <REGEX> "Regex to select particular URLs, Descriptions or Tags").required(false))
                         .arg(arg!(-f --format <FORMAT> "Optional output format").required(false))
@@ -47,7 +47,7 @@ pub fn command_line<'a>() -> Command<'a> {
                 .subcommand(
                     Command::new("test")
                         .about("Test the validity of bookmarks in the store")
-                        .arg(arg!(<NAME> "store name"))
+                        .arg(arg!(<store> "store name"))
                         .arg_required_else_help(true)
                         .arg(arg!(-r --regex <REGEX> "Regex to select particular URLs, Descriptions or Tags").required(false))
                         .arg(arg!(-f --format <FORMAT> "Optional output format").required(false))
@@ -60,7 +60,7 @@ pub fn command_line<'a>() -> Command<'a> {
                 .subcommand(
                     Command::new("new")
                         .about("Create a new bookmark")
-                        .arg(arg!(<URL> "URL for this bookmark"))
+                        .arg(arg!(<url> "URL for this bookmark"))
                         .arg_required_else_help(true)
                         .arg(arg!(-d --descr <DESCRIPTION> "Add a description to this URL").required(false))
                         .arg(arg!(-t --tags <TAGS> "Add tags to this URL")
