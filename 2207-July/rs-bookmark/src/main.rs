@@ -24,6 +24,31 @@ mod utils;
 
 
 //----- functions
+/* print a success message and exit with code 0
+ *
+ * Args:
+ *      message: the message to display before leaving
+ *
+ * Returns:
+ *      This function never returns
+ */
+fn success(message: &str) {
+    println!("{}", message);
+    process::exit(0);
+}
+
+/* print a failure message and exit with code 1
+ *
+ * Args:
+ *      message: the messa to display before leaving
+ *
+ * Returns:
+ *      This function never returns
+ */
+fn failure(message: &str) {
+    println!("{}", message);
+    process::exit(1);
+}
 
 
 //----- main entry point
@@ -38,17 +63,10 @@ fn main() {
                 Some(("new", sub_matches)) => {
 
                     let params = utils::retrieve_params(sub_matches);
-                    println!("{}", params);
-
-                    // if let Some(store) = sub_matches.get_one::<String>("NAME") {
-                    //     if store::create(store) {
-                    //         println!("Database [{}] has been created successfully.", store);
-                    //         process::exit(0);
-                    //     } else {
-                    //         eprintln!("Error: unable to create database [{}]!", store);
-                    //         process::exit(1);
-                    //     }
-                    // }
+                    match store::create(&params) {
+                        true =>success("The new database has been created"),
+                        false => failure("Error: unable to create the database.")
+                    }
                 }
 
                 Some(("export", sub_matches)) => {
@@ -69,19 +87,10 @@ fn main() {
             match sub_matches.subcommand() {
                 Some(("new", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);
-                    println!("{}", params);
-
-                    // retrieve the parameters
-                    // let values = retrieve_params(sub_matches);
-
-                    // create the URL
-                    // if url::create(values.0, values.1, values.2, values.3) {
-                    //     println!("URL has been created.");
-                    //     process::exit(0);
-                    // } else {
-                    //     eprintln!("Error: unable to create the URL.");
-                    //     process::exit(1);
-                    // }
+                    match url::create(params) {
+                        true => success("URL has been created."),
+                        false => failure("Error: unable to create the URL.")
+                    }
                 }
                 Some(("update", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);
@@ -93,19 +102,10 @@ fn main() {
                 }
                 Some(("delete", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);
-                    println!("{}", params);
-
-
-                    // let id = sub_matches.get_one::<String>("ID");
-                    // let store = sub_matches.get_one::<String>("store");
-
-                    // if url::delete(id, store) {
-                    //     println!("URL has been deleted.");
-                    //     process::exit(0);
-                    // } else {
-                    //     println!("Error: unable to delete the URL");
-                    //     process::exit(1);
-                    // }
+                    match url::delete(params) {
+                        true => success("URL has been deleted."),
+                        false => failure("Error: unable to delete the URL.")
+                    }
                 }
                 Some(("search", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);

@@ -16,6 +16,8 @@
 use std::path::Path;
 use rusqlite::{self, Connection};
 
+use crate::utils as utils;
+
 
 //----- globals
 // sqlite statement to create the table
@@ -31,9 +33,12 @@ const SQLITE_TABLE_CREATION: &str = "
 //----- functions
 
 // create a new SQLite database
-pub fn create(store_name: &String) -> bool {
+pub fn create(params: &utils::Params) -> bool {
+
+    let store_name = utils::get_store_name(params.1);
+
     // check if the database exist already
-    if Path::new(store_name).exists() {
+    if Path::new(&store_name).exists() {
         return true;
     }
 

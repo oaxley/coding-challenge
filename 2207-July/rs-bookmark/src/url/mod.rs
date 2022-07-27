@@ -110,17 +110,17 @@ pub fn update(id: Option<&String>, url: Option<&String>, descr: Option<&String>,
 }
 
 // delete an URL
-pub fn delete(id: Option<&String>, store: Option<&String>) -> bool {
+pub fn delete(params: utils::Params) -> bool {
 
     // retrieve the database name either from arguments or environment
-    let db_name: String = utils::get_store_name(store);
+    let db_name: String = utils::get_store_name(params.1);
     if db_name.is_empty() {
         eprintln!("Error: unable to determine the database name!");
         return false;
     }
 
     // retrieve the id
-    let id = get_string(id);
+    let id = get_string(params.0);
 
     // create the connection to the DB
     match database::connect(&db_name) {
