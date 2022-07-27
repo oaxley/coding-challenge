@@ -22,7 +22,7 @@ use rusqlite::{self, Connection};
 const SQLITE_TABLE_CREATION: &str = "
     CREATE TABLE bookmarks (
         id INTEGER PRIMARY KEY,
-        url TEXT NOT NULL,
+        url TEXT NOT NULL UNIQUE,
         description TEXT,
         tags TEXT
     )";
