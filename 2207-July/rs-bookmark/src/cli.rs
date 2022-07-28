@@ -104,9 +104,9 @@ pub fn command_line<'a>() -> Command<'a> {
                 .subcommand(
                     Command::new("search")
                         .about("Search for an URL")
-                        .arg(arg!(-u --url <URL> "Change the URL link").required(false))
-                        .arg(arg!(-d --descr <DESCRIPTION> "Change the description").required(false))
-                        .arg(arg!(-t --tags <TAGS> "Change the tags")
+                        .arg(arg!(-u --url <URL> "search in the URL field").required(false))
+                        .arg(arg!(-d --descr <DESCRIPTION> "search in the description").required(false))
+                        .arg(arg!(-t --tags <TAGS> "search in the tags")
                             .required(false)
                             .multiple(true)
                         )
