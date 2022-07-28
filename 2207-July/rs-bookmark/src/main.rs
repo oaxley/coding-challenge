@@ -115,10 +115,10 @@ fn main() {
                 }
                 Some(("search", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);
-                    // match url::search(params) {
-                    //     true => success(""),
-                    //     false => failure("Error: unable to find the URL.")
-                    // }
+                    match url::search(params) {
+                        true => success(""),
+                        false => failure("")
+                    }
                 }
                 _ => cli::command_line().print_help().unwrap()
             }
