@@ -14,7 +14,27 @@
 
 //----- imports
 use std::path::Path;
+use std::fmt;
 use rusqlite::{self, Connection};
+
+
+//----- structures
+
+// bookmark structure for Read/Search operations
+#[derive(Debug)]
+pub struct Bookmark {
+    pub id: i32,
+    pub url: String,
+    pub description: String,
+    pub tags: String
+}
+
+impl fmt::Display for Bookmark {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ID\t\t: {}\nURL\t\t: {}\nDescription\t: {}\nTags\t\t: {}",
+            self.id, self.url, self.description, self.tags)
+    }
+}
 
 
 //----- functions
