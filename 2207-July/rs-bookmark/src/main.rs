@@ -101,7 +101,10 @@ fn main() {
                 }
                 Some(("print", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);
-                    println!("{}", params);
+                    match url::read(params) {
+                        true => success(""),
+                        false => failure("")
+                    }
                 }
                 Some(("delete", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);
@@ -112,7 +115,10 @@ fn main() {
                 }
                 Some(("search", sub_matches)) => {
                     let params = utils::retrieve_params(sub_matches);
-                    println!("{}", params);
+                    // match url::search(params) {
+                    //     true => success(""),
+                    //     false => failure("Error: unable to find the URL.")
+                    // }
                 }
                 _ => cli::command_line().print_help().unwrap()
             }
