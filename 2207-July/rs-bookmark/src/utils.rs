@@ -130,3 +130,50 @@ pub fn retrieve_params(matches: &ArgMatches) -> Params {
         6: regex        // Regex
     }
 }
+
+
+/* check if all the parameters are unset
+ *
+ * Args:
+ *      params: the URL parameter
+ *
+ * Returns:
+ *      true is all the parameters are empty
+ */
+pub fn is_params_empty(params: &Params) -> bool {
+    let mut count = 0;
+
+    if params.0.is_none() {
+        count += 1;
+    }
+
+    if params.1.is_none() {
+        count += 1;
+    }
+
+    if params.2.is_none() {
+        count += 1;
+    }
+
+    if params.3.is_none() {
+        count += 1;
+    }
+
+    if params.4.is_empty() {
+        count += 1;
+    }
+
+    if params.5.is_none() {
+        count += 1;
+    }
+
+    if params.6.is_none() {
+        count += 1;
+    }
+
+    if count == 7 {
+        return true
+    }
+
+    return false
+}
