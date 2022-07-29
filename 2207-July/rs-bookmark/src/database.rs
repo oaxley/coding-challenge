@@ -16,12 +16,13 @@
 use std::path::Path;
 use std::fmt;
 use rusqlite::{self, Connection};
+use serde::{Serialize};
 
 
 //----- structures
 
 // bookmark structure for Read/Search operations
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Bookmark {
     pub id: i32,
     pub url: String,
