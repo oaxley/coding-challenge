@@ -20,6 +20,7 @@ mod create;
 mod read;
 mod update;
 mod delete;
+mod search;
 
 
 //----- functions
@@ -69,3 +70,4 @@ pub use create::create as create;
 pub use read::read as read;
 pub use update::update as update;
 pub use delete::delete as delete;
+pub use search::search as search;
