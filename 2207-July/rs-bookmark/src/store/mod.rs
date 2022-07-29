@@ -9,48 +9,12 @@
  * @author	Sebastien LEGRAND
  * @license	Apache License 2.0
  *
- * @brief	Main URL module
+ * @brief	Main Store module
  */
 
-//----- imports
-use std::path::Path;
-use rusqlite::{self, Connection};
-
-use crate::utils as utils;
+//----- modules
+mod create;
 
 
-//----- globals
-// sqlite statement to create the table
-const SQLITE_TABLE_CREATION: &str = "
-    CREATE TABLE bookmarks (
-        id INTEGER PRIMARY KEY,
-        url TEXT NOT NULL UNIQUE,
-        description TEXT,
-        tags TEXT
-    )";
-
-
-//----- functions
-
-// create a new SQLite database
-pub fn create(params: &utils::Params) -> bool {
-
-    let store_name = utils::get_store_name(params.1);
-
-    // check if the database exist already
-    if Path::new(&store_name).exists() {
-        return true;
-    }
-
-    // create a new SQLite database
-    match Connection::open(store_name) {
-        Ok(cnx) => {
-            // create the table(s)
-            match cnx.execute(SQLITE_TABLE_CREATION, ()) {
-                Ok(_) => return true,
-                Err(_) => return false
-            }
-        },
-        Err(_) => return false
-    }
-}
+//----- exports
+pub use create::create as create;
