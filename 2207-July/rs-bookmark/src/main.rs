@@ -21,7 +21,7 @@ mod database;
 mod store;
 mod url;
 mod utils;
-
+mod output;
 
 //----- functions
 /* print a success message and exit with code 0
@@ -63,8 +63,8 @@ fn main() {
                 Some(("new", sub_matches)) => {
 
                     let params = utils::retrieve_params(sub_matches);
-                    match store::create(&params) {
-                        true =>success("The new database has been created"),
+                    match store::create(params) {
+                        true => success("The new database has been created"),
                         false => failure("Error: unable to create the database.")
                     }
                 }

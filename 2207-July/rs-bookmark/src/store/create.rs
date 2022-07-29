@@ -33,7 +33,7 @@ const SQLITE_TABLE_CREATION: &str = "
 //----- functions
 
 // create a new SQLite database
-pub fn create(params: &utils::Params) -> bool {
+pub fn create(params: utils::Params) -> bool {
 
     let store_name = utils::get_store_name(params.1);
 
