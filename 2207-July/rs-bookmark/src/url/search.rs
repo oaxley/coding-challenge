@@ -18,6 +18,7 @@ use regex::Regex;
 use crate::database as database;
 use crate::utils as utils;
 use crate::url::{get_string, get_tags};
+use crate::output as output;
 
 
 //----- functions
@@ -93,6 +94,15 @@ pub fn search(params: utils::Params) -> bool {
     let url = get_string(params.2);
     let descr = get_string(params.3);
     let tags = get_tags(params.4);
+    let mut format = get_string(params.5);
+
+    // set the format to json by default
+    if format.is_empty() {
+        format = String::from("json");
+    }
+
+    // list of all the matching bookmarks
+    let mut bookmarks: Vec<database::Bookmark> = vec![];
 
     // retrieve the database name either from arguments or environment
     let db_name: String = utils::get_store_name(params.1);
@@ -151,8 +161,13 @@ pub fn search(params: utils::Params) -> bool {
                                 if do_not_print_me {
                                     continue;
                                 } else {
-                                    println!("{}", bookmark);
+                                    bookmarks.push(bookmark);
                                 }
+                            }
+
+                            // print the result
+                            if !bookmarks.is_empty() {
+                                output::serialize(&bookmarks, &format);
                             }
 
                             return true
