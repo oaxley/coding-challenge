@@ -48,6 +48,7 @@ This way we can refresh some old languages and learn new ones.
 | [rs-wc](./2207-July/rs-wc/) | Clone of the 'wc' unix tool | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
 | [rs-magic8](./2207-July/rs-magic8/) | Magic-8 ball, again | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
 | [rs-rps](./2207-July/rs-rps/) | Rock, Paper, Scissors ... | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
+| [rs-bookmark](./2207-July/rs-bookmark/) | A rudimentary bookmark manager | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
 
 
 ---
