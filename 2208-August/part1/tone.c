@@ -137,7 +137,7 @@ bool setupAlsa() {
 //----- main entry point
 int main(int argc, char* argv[]) {
 
-    int frequency = 0;
+    float frequency = 0.0;
     int duration = default_duration;
 
     //--- check for values on the command line
@@ -147,16 +147,14 @@ int main(int argc, char* argv[]) {
         exit(0);
     }
 
-    // --help
-    if ((argc == 2) && (strncmp(argv[1], "--help", 6) == 0)) {
-        help();
-        exit(0);
-    }
-
-    // frequency only
-    if ((argc == 2) && ((frequency = atoi(argv[1])) == 0)) {
-        printError("unable to convert frequency value.", 0);
-        exit(1);
+    // --help / frequency
+    if (argc >= 2) {
+        if (strncmp(argv[1], "--help", 6) == 0) {
+            help();
+            exit(0);
+        } else {
+            frequency = atof(argv[1]);
+        }
     }
 
     // duration
