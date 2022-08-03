@@ -125,6 +125,12 @@ bool setupAlsa() {
         return false;
     }
 
+    // prepare the audio device
+    if ((err = snd_pcm_prepare(device)) < 0 ) {
+        printError("unable to prepare audio interface.", err);
+        return false;
+    }
+
     return true;
 }
 
