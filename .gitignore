@@ -15,3 +15,6 @@
 !**/images/*.png
 #!qrcode.png
 #!schematics.png
+
+# ignore directory for C/C++ compilation
+**/build/*
