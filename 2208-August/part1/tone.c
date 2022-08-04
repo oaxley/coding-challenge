@@ -30,8 +30,8 @@ const bool true = 1;
 
 const int channels = 1;             // number of channels
 const int default_duration = 1;     // duration in seconds
-const int sampling_freq = 44100;    // sampling frequency
-const int buffer_length = 48000;    // buffer length for Alsa
+const int sampling_freq = 48000;    // sampling frequency
+const int buffer_length = 48000;    // buffer length for Alsa, should be equal to sampling frequency to avoid "click" sound
 
 
 //----- globals
