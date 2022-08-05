@@ -206,4 +206,27 @@ void playFrequency(float frequency, int duration) {
 
 }
 
+/* play a note
+ *
+ * Args:
+ *      note: the MIDI note value from 21 (A0) to 108 (C8)
+ */
+void playNote(unsigned char note, int duration) {
+    // clamp values
+    note = (note < 21) ? 21 : note;
+    note = (note > 108) ? 108 : note;
+
+    // generate the corresponding frequency
+    float freq = 440.0 * pow(2, (note - 69) / 12.0);
+
+    // play the note
+    playFrequency(freq, duration);
+}
+
+
+/* print alsa version */
+void printVersion() {
+    printf("ALSA library version: %s\n", SND_LIB_VERSION_STR);
+}
+
 #endif  // H_ALSA_HELPER
