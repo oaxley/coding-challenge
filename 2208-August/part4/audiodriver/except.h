@@ -40,11 +40,11 @@ class BaseExceptionError : public std::exception
         const char *message_{nullptr};
 };
 
-// exception thrown when driver cannot be initialized
-class AudioInitError : BaseExceptionError
+// generic driver exception
+class AudioError : BaseExceptionError
 {
     public:
-        explicit AudioInitError(const char* message) :
+        explicit AudioError(const char* message) :
             BaseExceptionError(message)
         { }
 };
