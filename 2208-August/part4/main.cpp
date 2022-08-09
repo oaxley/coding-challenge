@@ -27,7 +27,17 @@ const int duration = 1;
 
 
 //----- functions
-void playFrequency(Audio::IDriver* pAudio, float frequency, int duration) {
+/* print help */
+void help()
+{
+    std::cout << "sound - Generate a tone with either Alsa or PulseAudio" << std::endl;
+    std::cout << "Syntax:" << std::endl;
+    std::cout << "    sound [--help] --freq/-f <frequency> [--time/-t <duration>]" << std::endl;
+    std::cout << std::endl;
+    std::cout << "--freq/-f : generate a sound at the selected frequency" << std::endl;
+    std::cout << "--time/-t : duration for playing the sound (default: 1s)" << std::endl;
+    std::cout << std::endl;
+}
 
     // print information
     std::cout << "Playing frequency " << frequency << " Hz ";
