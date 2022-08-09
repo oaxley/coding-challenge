@@ -16,8 +16,9 @@
 #!qrcode.png
 #!schematics.png
 
-# ignore directory for C/C++ compilation
+# ignore directory/files for C/C++ compilation
 **/build/*
+**/*.o
 
 # ignore the temporary / sandbox directory
 **/tmp/*
