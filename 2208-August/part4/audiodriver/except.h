@@ -41,7 +41,7 @@ class BaseExceptionError : public std::exception
 };
 
 // generic driver exception
-class AudioError : BaseExceptionError
+class AudioError : public BaseExceptionError
 {
     public:
         explicit AudioError(const char* message) :
