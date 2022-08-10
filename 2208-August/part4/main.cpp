@@ -14,7 +14,9 @@
 
 //----- includes
 #include <iostream>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
+#include <getopt.h>
 #include "AlsaDriver.h"
 #include "audiodriver/except.h"
 
@@ -39,6 +41,9 @@ void help()
     std::cout << std::endl;
 }
 
+
+void playFrequency(Audio::IDriver* pAudio, float frequency, int duration)
+{
     // print information
     std::cout << "Playing frequency " << frequency << " Hz ";
     std::cout << "for " << duration << " seconds." << std::endl;
@@ -143,13 +148,17 @@ int main(int argc, char* argv[])
 
     try
     {
+        // select the Alsa driver (for now)
         Audio::IDriver* audio = new AlsaDriver();
 
+        // open and setup the audio
         audio->open(&params);
         audio->setup();
 
-        playFrequency(audio, 440, 3);
+        // play the frequency selected by the user
+        playFrequency(audio, frequency, duration);
 
+        // close the audio
         audio->close();
     }
     catch (Audio::AudioError e)
