@@ -23,7 +23,7 @@
 const int channels = 1;
 const int rate = 48'000;
 const int buffer_length = rate;
-const int duration = 1;
+const int default_duration = 1;
 
 
 //----- functions
@@ -95,8 +95,45 @@ void help()
 }
 
 //----- main entry point
-int main()
+int main(int argc, char* argv[])
 {
+    float frequency = -1.0;
+    int duration = default_duration;
+
+    // command line options
+    struct option long_options[] = {
+        {"freq", required_argument, 0, 'f'},
+        {"time", required_argument, 0, 't'},
+        {"help", no_argument,       0, 'h'},
+        {0,      0,                 0,  0}
+    };
+
+    // process command line arguments
+    int long_index = 0;
+    int opt;
+    while((opt = getopt_long(argc, argv, "f:t:h", long_options, &long_index)) != -1) {
+        switch(opt) {
+            case 'f':
+                frequency = atof(optarg);
+                break;
+            case 't':
+                duration = atoi(optarg);
+                break;
+            case 'h':
+            default:
+                help();
+                exit(0);
+        }
+    }
+
+    // no frequency selected by the user -> error
+    if (frequency < 0) {
+        std::cerr << "Error: please specify a frequency." << std::endl;
+        std::cerr << "User --help/-h for help." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // audio parameters
     Audio::Parameters params = {
         .name = "default",
         .channels = channels,
