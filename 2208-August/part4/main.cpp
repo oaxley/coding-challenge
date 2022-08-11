@@ -16,9 +16,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
+#include <string>
 #include <getopt.h>
-#include "AlsaDriver.h"
+
 #include "audiodriver/except.h"
+#include "AlsaDriver.h"
+#include "PulseDriver.h"
 
 
 //----- constants
@@ -27,6 +30,11 @@ const int rate = 48'000;
 const int buffer_length = rate;
 const int default_duration = 1;
 
+typedef enum {
+    ALSA,
+    PULSEAUDIO
+} driver_t;
+
 
 //----- functions
 /* print help */
@@ -34,10 +42,14 @@ void help()
 {
     std::cout << "sound - Generate a tone with either Alsa or PulseAudio" << std::endl;
     std::cout << "Syntax:" << std::endl;
-    std::cout << "    sound [--help] --freq/-f <frequency> [--time/-t <duration>]" << std::endl;
+    std::cout << "    sound [--help] --freq/-f <frequency> ";
+    std::cout << "[--time/-t <duration>] ";
+    std::cout << "[--driver/-d <driver>]";
     std::cout << std::endl;
-    std::cout << "--freq/-f : generate a sound at the selected frequency" << std::endl;
-    std::cout << "--time/-t : duration for playing the sound (default: 1s)" << std::endl;
+    std::cout << std::endl;
+    std::cout << "--freq/-f   : generate a sound at the selected frequency" << std::endl;
+    std::cout << "--time/-t   : duration for playing the sound (default: 1s)" << std::endl;
+    std::cout << "--driver/-d : select Alsa / PulseAudio driver for output (default: alsa)" << std::endl;
     std::cout << std::endl;
 }
 
@@ -104,25 +116,32 @@ int main(int argc, char* argv[])
 {
     float frequency = -1.0;
     int duration = default_duration;
+    driver_t driver = ALSA;
 
     // command line options
     struct option long_options[] = {
-        {"freq", required_argument, 0, 'f'},
-        {"time", required_argument, 0, 't'},
-        {"help", no_argument,       0, 'h'},
-        {0,      0,                 0,  0}
+        {"freq",   required_argument, 0, 'f'},
+        {"time",   required_argument, 0, 't'},
+        {"help",   no_argument,       0, 'h'},
+        {"driver", required_argument, 0, 'd'},
+        {0,        0,                 0,  0}
     };
 
     // process command line arguments
     int long_index = 0;
     int opt;
-    while((opt = getopt_long(argc, argv, "f:t:h", long_options, &long_index)) != -1) {
+    while((opt = getopt_long(argc, argv, "f:t:hd:", long_options, &long_index)) != -1) {
         switch(opt) {
             case 'f':
                 frequency = atof(optarg);
                 break;
             case 't':
                 duration = atoi(optarg);
+                break;
+            case 'd':
+                if (std::string(optarg) == std::string("pulse")) {
+                    driver = PULSEAUDIO;
+                }
                 break;
             case 'h':
             default:
@@ -148,8 +167,18 @@ int main(int argc, char* argv[])
 
     try
     {
-        // select the Alsa driver (for now)
-        Audio::IDriver* audio = new AlsaDriver();
+        Audio::IDriver* audio = nullptr;
+
+        // select the corresponding driver
+        if (driver == ALSA) {
+            std::cout << "Selecting Alsa driver." << std::endl;
+            audio = new AlsaDriver();
+        } else {
+            if (driver == PULSEAUDIO) {
+                std::cout << "Selecting PulseAudio driver." << std::endl;
+                audio = new PulseDriver();
+            }
+        }
 
         // open and setup the audio
         audio->open(&params);
