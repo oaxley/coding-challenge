@@ -32,8 +32,8 @@ struct AlsaDriver::OpaqueData
 // initialize the structure
 void AlsaDriver::OpaqueData::create()
 {
-    device = NULL;
-    params = NULL;
+    device = nullptr;
+    params = nullptr;
 }
 
 // destroy the structure
