@@ -49,7 +49,7 @@ void help()
     std::cout << std::endl;
     std::cout << "--freq/-f   : generate a sound at the selected frequency" << std::endl;
     std::cout << "--time/-t   : duration for playing the sound (default: 1s)" << std::endl;
-    std::cout << "--driver/-d : select Alsa / PulseAudio driver for output (default: alsa)" << std::endl;
+    std::cout << "--driver/-d : select alsa (Alsa) / pulse (PulseAudio) driver for output (default: alsa)" << std::endl;
     std::cout << std::endl;
 }
 
