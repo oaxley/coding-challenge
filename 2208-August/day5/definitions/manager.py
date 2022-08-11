@@ -79,7 +79,7 @@ class FormatManager:
             the name of the plugin to load
         """
         for plugin in self._plugins:
-            if extension.lower() == self._plugins[plugin][format].lower():
+            if extension.lower() == self._plugins[plugin]['format'].lower():
                 return plugin
 
         return ""
