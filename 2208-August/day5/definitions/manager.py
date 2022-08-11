@@ -69,6 +69,21 @@ class FormatManager:
         else:
             return None
 
+    def lookup(self, extension: str) -> str:
+        """Return the most suitable plugin to load this extensio
+
+        Args:
+            extension: the extension of the file [mod, s3m, 669, xm]
+
+        Returns:
+            the name of the plugin to load
+        """
+        for plugin in self._plugins:
+            if extension.lower() == self._plugins[plugin][format].lower():
+                return plugin
+
+        return ""
+
     @staticmethod
     def register(ext):
         def inner(cls):
