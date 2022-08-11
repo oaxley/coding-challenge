@@ -9,9 +9,19 @@
 # @author	Sebastien LEGRAND
 # @license	Apache License 2.0
 #
-# @brief	Init file definitions
+# @brief	Class to aggregate all the MOD information
 
 #----- imports
-from .plugins import IFormat
-from .manager import FormatManager
-from .info import ModInformation
+from __future__ import annotations
+
+
+#----- classes
+class ModInformation:
+    """Aggregate all the MOD information in one place"""
+
+    def __init__(self) -> None:
+        """Constructor"""
+
+    def display(self) -> None:
+        """Display the information"""
+
