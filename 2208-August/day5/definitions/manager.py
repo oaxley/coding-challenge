@@ -50,7 +50,13 @@ class FormatManager:
         Returns:
             a list of all the plugins name
         """
-        return list(self._plugins.keys())
+        plugins = []
+        for plugin in self._plugins.keys():
+            descr = self._plugins[plugin]['description']
+            fmt = self._plugins[plugin]['format']
+            plugins.append((plugin, fmt, descr))
+
+        return plugins
 
     def factory(self, name: str) -> Optional[IFormat]:
         """Create a new instance of a registered plugin
@@ -59,19 +65,25 @@ class FormatManager:
             the associated plugins, None otherwise
         """
         if name in self._plugins:
-            return self._plugins[name]()
+            return self._plugins[name]['cls']()
         else:
             return None
 
     @staticmethod
-    def register(cls):
-        """Decorator to register a new plugin"""
-        # retrieve the format manager instance
-        instance = FormatManager()
+    def register(ext):
+        def inner(cls):
+            """Decorator to register a new plugin"""
+            # retrieve the format manager instance
+            instance = FormatManager()
 
-        # register the plugin
-        if cls.__name__ not in instance._plugins:
-            instance._plugins[cls.__name__] = cls
+            # register the plugin
+            if cls.__name__ not in instance._plugins:
+                instance._plugins[cls.__name__] = {
+                    'cls': cls,
+                    'format': ext,
+                    'description': cls.__doc__
+                }
 
-        # don't modify the decorated class
-        return cls
+            # don't modify the decorated class
+            return cls
+        return inner
