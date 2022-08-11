@@ -3,7 +3,7 @@
 # generic variables
 CC=g++
 CFLAGS=-g3
-LDFLAGS=-lm -lasound
+LDFLAGS=-lm -lasound -lpulse -lpulse-simple -pthread
 
 # build dir and target
 BUILD_DIR := ../build
