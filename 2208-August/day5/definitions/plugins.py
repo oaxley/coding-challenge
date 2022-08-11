@@ -17,6 +17,8 @@ from typing import Any
 
 from abc import abstractmethod, ABC
 
+from .info import ModInformation
+
 
 #----- classes
 class IFormat(ABC):
@@ -26,6 +28,6 @@ class IFormat(ABC):
         """Constructor"""
 
     @abstractmethod
-    def process(self) -> None:
+    def process(self, filename: str) -> ModInformation:
         """Process the file"""
         raise NotImplementedError()
