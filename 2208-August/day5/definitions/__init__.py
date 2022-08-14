@@ -14,4 +14,6 @@
 #----- imports
 from .plugins import IFormat
 from .manager import FormatManager
-from .info import ModInformation
+from .info import (
+    ModInformation, ModSample
+)
