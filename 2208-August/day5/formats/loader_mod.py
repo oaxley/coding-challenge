@@ -83,7 +83,7 @@ class LoaderMod(IFormat):
             # read tracks pattern
             for i in range(128):
                 value = struct.unpack("B", fh.read(1))[0]
-                if value > obj.pattern:
+                if value > obj.max_pattern:
                     obj.max_pattern = value
                 obj.tracks.append(value)
 
