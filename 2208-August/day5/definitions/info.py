@@ -22,12 +22,12 @@ from dataclasses import dataclass
 @dataclass
 class ModSample:
     """Single MOD sample information"""
-    name: str
-    length: int
-    fine_tune: int
-    volume: int
-    loop_start: int
-    loop_length: int
+    name: str = ""
+    length: int = 0
+    fine_tune: int = 0
+    volume: int = 0
+    loop_start: int = 0
+    loop_length: int = 0
 
 
 class ModInformation:
@@ -54,14 +54,14 @@ class ModInformation:
         print(f"Track List  : {self.tracks[:self.song_length]}")
 
         print(f"Instruments :")
-        print(f"    | {' ':^22} | {'Length':^10} | {' ':^8} | {' ':^8} | {'Loop':^7} | {'Loop':^7} |")
-        print(f" ID | {'Name':^22} | {'(bytes)':^10} | {'Finetune':^8} | {'Volume':^8} | {'Start':^7} | {'Length':^7} |")
-        print(f"----+{'-' * 24}+{'-' * 12}+{'-' * 10}+{'-' * 10}+{'-' * 9}+{'-' * 9}+")
+        print(f"    | {' ':^30} | {'Length':^10} | {' ':^8} | {' ':^8} | {'Loop':^7} | {'Loop':^7} |")
+        print(f" ID | {'Name':^30} | {'(bytes)':^10} | {'Finetune':^8} | {'Volume':^8} | {'Start':^7} | {'Length':^7} |")
+        print(f"----+{'-' * 32}+{'-' * 12}+{'-' * 10}+{'-' * 10}+{'-' * 9}+{'-' * 9}+")
         for i, sample in enumerate(self.instruments):
             # don't output empty instruments
             if sample.length == 0:
                 continue
 
-            print(f" {i:02d} | {sample.name:>22} | {sample.length:>10} | {sample.fine_tune:>8} | {sample.volume:>8} | {sample.loop_start:>7} | {sample.loop_length:>7} |")
+            print(f" {i:02d} | {sample.name:<30} | {sample.length:>10} | {sample.fine_tune:>8} | {sample.volume:>8} | {sample.loop_start:>7} | {sample.loop_length:>7} |")
 
         print("")
