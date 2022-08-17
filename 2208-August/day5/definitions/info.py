@@ -42,11 +42,13 @@ class ModInformation:
         self.song_length: int = 0
         self.tracks: List[int] = []
         self.max_pattern: int = 0
+        self.tracker: str = ""
 
     def display(self) -> None:
         """Display the information"""
         print("====== Music MOD Information ======")
         print(f"Format      : {self.file_fmt}")
+        print(f"Tracker     : {self.tracker}")
         print(f"Song Name   : {self.song_name}")
         print(f"Song Length : {self.song_length} tracks")
         print(f"Channels    : {self.channels}")
