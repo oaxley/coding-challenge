@@ -56,7 +56,13 @@ class LoaderS3M(IFormat):
             nb_pattern = struct.unpack("H", fh.read(2))[0]
 
             fh.read(2)  # flags
-            fh.read(2)  # cwt/v
+            value = struct.unpack("H", fh.read(2))[0]  # tracker
+            if ((value & 0xF000) >> 12) == 1:
+                obj.tracker = "Scream Tracker"
+
+            obj.tracker += " v" + f"{(value & 0x0F00) >> 8}"
+            obj.tracker += "." + f"{(value & 0x00F0) >> 4}" + f"{value & 0x000F}"
+
             fh.read(2)  # sample format
             fh.read(4)  # SCRM
             fh.read(1)  # global volume
