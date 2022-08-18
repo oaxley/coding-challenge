@@ -3,6 +3,7 @@
 # development environment files
 **/.python-version
 **/.envrc
+**/.vscode
 
 # python files
 **/__pycache__
