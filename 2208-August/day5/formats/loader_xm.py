@@ -58,8 +58,8 @@ class LoaderXM(IFormat):
             nb_instruments = struct.unpack("h", fh.read(2))[0]
 
             fh.read(2)      # flags
-            fh.read(2)      # default tempo
-            fh.read(2)      # default BPM
+            obj.speed = struct.unpack("h", fh.read(2))[0]       # speed
+            obj.tempo = struct.unpack("h", fh.read(2))[0]       # BPM
 
             # pattern data
             for i in range(256):

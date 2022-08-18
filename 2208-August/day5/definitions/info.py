@@ -40,9 +40,22 @@ class ModInformation:
         self.channels: int = 0
         self.instruments: List[ModSample] = []
         self.song_length: int = 0
+        self.tempo = 125
+        self.speed = 6
         self.tracks: List[int] = []
         self.max_pattern: int = 0
         self.tracker: str = ""
+
+    def estimate(self,) -> str:
+        rows = self.song_length * 64
+
+        # Speed is 6 and BPM=125 (50Hz)
+        total_secs = rows * self.speed * 1 / (2 * self.tempo / 5)
+
+        minutes = int(total_secs // 60)
+        seconds = int(total_secs % 60)
+
+        return f"00:{minutes:02d}:{seconds:02d}"
 
     def display(self) -> None:
         """Display the information"""
@@ -50,7 +63,8 @@ class ModInformation:
         print(f"Format      : {self.file_fmt}")
         print(f"Tracker     : {self.tracker}")
         print(f"Song Name   : {self.song_name}")
-        print(f"Song Length : {self.song_length} tracks")
+        print(f"Song Length : {self.song_length} tracks (estimated {self.estimate()})")
+        print(f"Speed / BPM : {self.speed} / {self.tempo}")
         print(f"Channels    : {self.channels}")
         print(f"Max Pattern : {self.max_pattern}")
         print(f"Track List  : {self.tracks[:self.song_length]}")

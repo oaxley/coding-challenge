@@ -66,8 +66,10 @@ class LoaderS3M(IFormat):
             fh.read(2)  # sample format
             fh.read(4)  # SCRM
             fh.read(1)  # global volume
-            fh.read(1)  # initial speed
-            fh.read(1)  # initial tempo
+
+            obj.speed = struct.unpack("B", fh.read(1))[0]
+            obj.tempo = struct.unpack("B", fh.read(1))[0]
+
             fh.read(1)  # master volume
             fh.read(1)  # ultraclick
             fh.read(1)  # default panning
