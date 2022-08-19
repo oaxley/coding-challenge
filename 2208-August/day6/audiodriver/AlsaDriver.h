@@ -1,5 +1,5 @@
 /* -*- coding: utf-8 -*-
- * vim: set ft=cpp
+ * vim: ft=cpp
  *
  * This source file is subject to the Apache License 2.0
  * that is bundled with this package in the file LICENSE.txt.
@@ -9,39 +9,39 @@
  * @author	Sebastien LEGRAND
  * @license	Apache License 2.0
  *
- * @brief	Audio Driver Interface
+ * @brief	Alsa Audio Driver
  */
 
-//----- guard
-#ifndef IAUDIO_DRIVER_H
-#define IAUDIO_DRIVER_H
+//----- guards
+#ifndef ALSA_DRIVER_H
+#define ALSA_DRIVER_H
 
 
 //----- includes
+#include <memory>
+
 #include "../slMacros.h"
-#include "params.h"
+#include "idriver.h"
 
 
 //----- class
 BEGIN_NAMESPACE(Audio)
 
-class IDriver
+class AlsaDriver : public IDriver
 {
     public:     // public methods
-        IDriver()
-        { }
+        AlsaDriver();
+        virtual ~AlsaDriver();
 
-        virtual ~IDriver()
-        { }
-
-        virtual void open(Parameters* pParams) = 0;
-        virtual void close() = 0;
-        virtual void setup() = 0;
-        virtual void push(float* buffer, int frames, int count) = 0;
+        virtual void open(Parameters* pParams);
+        virtual void close();
+        virtual void setup();
+        virtual void push(float* buffer, int frames, int count);
 
     private:    // private members
+        struct OpaqueData;
+        std::unique_ptr<OpaqueData> data_;
 };
 
 END_NAMESPACE(Audio)
-
-#endif // IAUDIO_DRIVER_H
+#endif // ALSA_DRIVER_H
