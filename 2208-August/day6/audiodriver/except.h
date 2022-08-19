@@ -16,12 +16,16 @@
 #ifndef AUDIO_EXCEPT_H
 #define AUDIO_EXCEPT_H
 
+
 //----- includes
 #include <exception>
 #include <string>
 
-namespace Audio
-{
+#include "../slMacros.h"
+
+
+//----- classes
+BEGIN_NAMESPACE(Audio)
 
 // base exception
 class BaseExceptionError : public std::exception
@@ -49,6 +53,6 @@ class AudioError : public BaseExceptionError
         { }
 };
 
-}; // Audio Namespace
+END_NAMESPACE(Audio)
 
 #endif // AUDIO_EXCEPT_H

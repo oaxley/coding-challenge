@@ -16,14 +16,15 @@
 #ifndef IAUDIO_DRIVER_H
 #define IAUDIO_DRIVER_H
 
+
 //----- includes
+#include "../slMacros.h"
 #include "params.h"
 
-// Audio Namespace
-namespace Audio
-{
 
-//----- classes
+//----- class
+BEGIN_NAMESPACE(Audio)
+
 class IDriver
 {
     public:     // public methods
@@ -41,6 +42,6 @@ class IDriver
     private:    // private members
 };
 
-};  // Audio Namespace
+END_NAMESPACE(Audio)
 
 #endif // IAUDIO_DRIVER_H

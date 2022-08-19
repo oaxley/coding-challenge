@@ -16,18 +16,22 @@
 #ifndef AUDIO_PARAMETERS_H
 #define AUDIO_PARAMETERS_H
 
-// namespace
-namespace Audio
-{
+
+//----- includes
+#include "../slMacros.h"
+
+
+//----- structures
+BEGIN_NAMESPACE(Audio)
 
 typedef struct
 {
     const char* name;
     int channels;
-    int format;             // not in use
+    int format;
     int rate;
 } Parameters;
 
-}; // Audio Namespace
+END_NAMESPACE(Audio)
 
 #endif // AUDIO_PARAMETERS_H
