@@ -13,10 +13,12 @@
  */
 
 //----- includes
+#include <list>
+#include <memory>
 #include <cstdint>
 
 #include "slMacros.h"
-#include "modConst.h"
+#include "constants.h"
 
 
 BEGIN_NAMESPACE(mod)
@@ -46,6 +48,12 @@ typedef struct {
 
     uint8_t* pdata;                         // a pointer to the data in memory
 } Sample;
+
+// MOD Tracker song
+typedef struct {
+    Header* pHeader;
+    std::list<std::unique_ptr<Sample>> samples;
+} Song;
 
 END_NAMESPACE(file)
 END_NAMESPACE(mod)

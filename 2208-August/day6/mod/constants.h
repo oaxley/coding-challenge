@@ -15,7 +15,7 @@
 //----- includes
 #include <cstdint>
 
-#include "slMacros.h"
+#include "../slMacros.h"
 
 
 BEGIN_NAMESPACE(mod)
