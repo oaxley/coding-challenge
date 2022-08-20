@@ -11,6 +11,8 @@
  *
  * @brief	MOD Player Structures
  */
+#ifndef MOD_STRUCTURES_H
+#define MOD_STRUCTURES_H
 
 //----- includes
 #include <list>
@@ -57,3 +59,5 @@ typedef struct {
 
 END_NAMESPACE(file)
 END_NAMESPACE(mod)
+
+#endif // MOD_STRUCTURES_H

@@ -11,6 +11,8 @@
  *
  * @brief	MOD Player Constants
  */
+#ifndef MOD_CONSTANTS_H
+#define MOD_CONSTANTS_H
 
 //----- includes
 #include <cstdint>
@@ -35,3 +37,5 @@ const uint8_t kSampleNameLength = 24;
 
 END_NAMESPACE(file)
 END_NAMESPACE(mod)
+
+#endif // MOD_CONSTANTS_H
