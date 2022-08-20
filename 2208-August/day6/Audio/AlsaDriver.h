@@ -25,7 +25,7 @@
 
 
 //----- class
-BEGIN_NAMESPACE(Audio)
+BEGIN_NAMESPACE(audio)
 
 class AlsaDriver : public IDriver
 {
@@ -43,5 +43,5 @@ class AlsaDriver : public IDriver
         std::unique_ptr<OpaqueData> data_;
 };
 
-END_NAMESPACE(Audio)
+END_NAMESPACE(audio)
 #endif // ALSA_DRIVER_H

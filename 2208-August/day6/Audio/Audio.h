@@ -21,11 +21,11 @@
 #include "PulseDriver.h"
 
 
-BEGIN_NAMESPACE(Audio)
+BEGIN_NAMESPACE(audio)
 
 typedef enum {
     ALSA_DRIVER,
     PULSE_DRIVER
 } DriverEnum;
 
-END_NAMESPACE(Audio)
+END_NAMESPACE(audio)

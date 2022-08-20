@@ -25,7 +25,7 @@
 
 
 //----- class
-BEGIN_NAMESPACE(Audio)
+BEGIN_NAMESPACE(audio)
 
 class PulseDriver : public IDriver
 {
@@ -43,6 +43,6 @@ class PulseDriver : public IDriver
         std::unique_ptr<OpaqueData> data_;
 };
 
-END_NAMESPACE(Audio)
+END_NAMESPACE(audio)
 
 #endif // PULSE_DRIVER_H

@@ -23,7 +23,7 @@
 
 
 //----- class
-BEGIN_NAMESPACE(Audio)
+BEGIN_NAMESPACE(audio)
 
 class IDriver
 {
@@ -42,6 +42,6 @@ class IDriver
     private:    // private members
 };
 
-END_NAMESPACE(Audio)
+END_NAMESPACE(audio)
 
 #endif // IAUDIO_DRIVER_H

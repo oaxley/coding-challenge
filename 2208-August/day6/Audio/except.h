@@ -25,7 +25,7 @@
 
 
 //----- classes
-BEGIN_NAMESPACE(Audio)
+BEGIN_NAMESPACE(audio)
 
 // base exception
 class BaseExceptionError : public std::exception
@@ -53,6 +53,6 @@ class AudioError : public BaseExceptionError
         { }
 };
 
-END_NAMESPACE(Audio)
+END_NAMESPACE(audio)
 
 #endif // AUDIO_EXCEPT_H

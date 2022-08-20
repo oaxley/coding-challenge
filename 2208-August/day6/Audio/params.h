@@ -22,7 +22,7 @@
 
 
 //----- structures
-BEGIN_NAMESPACE(Audio)
+BEGIN_NAMESPACE(audio)
 
 typedef struct
 {
@@ -32,6 +32,6 @@ typedef struct
     int rate;
 } Parameters;
 
-END_NAMESPACE(Audio)
+END_NAMESPACE(audio)
 
 #endif // AUDIO_PARAMETERS_H

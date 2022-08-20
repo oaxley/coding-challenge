@@ -19,7 +19,7 @@
 #include "except.h"
 #include "PulseDriver.h"
 
-BEGIN_NAMESPACE(Audio)
+BEGIN_NAMESPACE(audio)
 
 //----- class structure
 struct PulseDriver::OpaqueData
@@ -118,4 +118,4 @@ void PulseDriver::push(float* buffer, int frames, int count)
     }
 }
 
-END_NAMESPACE(Audio)
+END_NAMESPACE(audio)
