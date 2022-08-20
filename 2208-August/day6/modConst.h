@@ -18,18 +18,20 @@
 #include "slMacros.h"
 
 
-BEGIN_NAMESPACE(Mod)
+BEGIN_NAMESPACE(mod)
+BEGIN_NAMESPACE(file)
 
 // max number of samples in a MOD tracker file
-const uint8_t MAX_NUMBER_SAMPLES = 31;
+const uint8_t kMaxNumberSamples = 31;
 
 // max number of patterns in a MOD tracker file
-const uint8_t MAX_NUMBER_PATTERNS = 128;
+const uint8_t kMaxNumberPattern = 128;
 
 // max number of characters in the song title
-const uint8_t SONG_TITLE_LENGTH = 22;
+const uint8_t kSongTitleLength = 22;
 
 // max number of characters in the sample name
-const uint8_t SAMPLE_NAME_LENGTH = 24;
+const uint8_t kSampleNameLength = 24;
 
-END_NAMESPACE(Mod)
+END_NAMESPACE(file)
+END_NAMESPACE(mod)
