@@ -23,10 +23,10 @@ $(TARGET): $(OBJS)
 	$(CC) $^ -o $@ $(LDFLAGS)
 
 .cpp.o:
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $^ -o $@
 
 
 .PHONY: clean
 clean:
-	rm -f *.o
-	rm -f $(TARGET)
+	@find . -type f -name '*.o' -exec rm {} \;
+	@rm -f $(TARGET)
