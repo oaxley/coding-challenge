@@ -24,8 +24,8 @@
 BEGIN_NAMESPACE(audio)
 
 typedef enum {
-    ALSA_DRIVER,
-    PULSE_DRIVER
+    kAlsa,
+    kPulseAudio,
 } DriverEnum;
 
 END_NAMESPACE(audio)

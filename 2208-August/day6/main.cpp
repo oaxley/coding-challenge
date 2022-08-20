@@ -53,7 +53,7 @@ void printError(const char* message)
 //----- main entry point
 int main(int argc, char* argv[])
 {
-    Audio::DriverEnum driver = Audio::PULSE_DRIVER;
+    audio::DriverEnum driver = audio::kPulseAudio;
     std::string filename = "";
 
     // command line options
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
         {
         case 'd':
             if (std::string(optarg) == std::string("alsa")) {
-                driver = Audio::ALSA_DRIVER;
+                driver = audio::kAlsa;
             }
             break;
 
