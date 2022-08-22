@@ -21,6 +21,7 @@
 #include <filesystem>
 
 #include "Audio/Audio.h"
+#include "mod/loader.h"
 
 
 //----- functions
@@ -98,7 +99,8 @@ int main(int argc, char* argv[])
 
     try
     {
-        // read the MOD Tracker file here
+        // create a new instance of the loader
+        mod::file::Loader loader = mod::file::Loader(filename);
     }
     catch(const std::exception& e)
     {
