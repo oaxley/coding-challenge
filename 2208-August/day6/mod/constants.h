@@ -35,6 +35,9 @@ const uint8_t kSongTitleLength = 22;
 // max number of characters in the sample name
 const uint8_t kSampleNameLength = 24;
 
+// marker position in a Tracker file
+const uint16_t kMarkerPosition = 1080;
+
 END_NAMESPACE(file)
 END_NAMESPACE(mod)
 
