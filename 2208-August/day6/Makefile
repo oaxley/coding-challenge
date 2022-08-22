@@ -1,7 +1,12 @@
 # Makefile
 
 # generic variables
-CC=g++
+ifdef DEBUG
+	CC=g++ -DDEBUG
+else
+	CC=g++
+endif
+
 CFLAGS=-g3
 LDFLAGS=-lm -lasound -lpulse -lpulse-simple -pthread
 
