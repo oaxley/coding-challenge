@@ -40,6 +40,7 @@ struct Loader::OpaqueData
     uint16_t readWord();
     uint8_t readByte();
     void readBytes(uint16_t count, char* buffer);
+    void readString(uint16_t count, char* buffer);
 
 #if DEBUG
     void printHeader();
@@ -108,6 +109,29 @@ void Loader::OpaqueData::readBytes(uint16_t count, char* buffer)
     handle_.read(buffer, count);
 }
 
+/* read a null-terminated string and remove non printable characters
+ *
+ * Args:
+ *      count: the number of bytes to read
+ *      buffer: the destination buffer
+ */
+void Loader::OpaqueData::readString(uint16_t count, char* buffer)
+{
+    // read the string
+    handle_.read(buffer, count - 1);
+
+    // remove non printable characters
+    for (int i = 0; i < count - 1; i++)
+    {
+        if ((buffer[i] > 0) && (buffer[i] < 32)) {
+            buffer[i] = ' ';
+        }
+    }
+
+    // properly terminate the string
+    buffer[count] = '\0';
+}
+
 /* print debug information */
 #if DEBUG
 void Loader::OpaqueData::printHeader()
@@ -169,7 +193,7 @@ bool Loader::isValidFile()
 void Loader::load()
 {
     // instantiate the header
-    data_->pSong_->header = std::make_unique<mod::file::Header>();
+    data_->pSong_->header = std::make_unique<Header>();
     if (data_->pSong_->header == nullptr) {
         throw OutOfMemoryError("Unable to allocate memory for MOD header");
     }
@@ -197,13 +221,7 @@ void Loader::load()
     }
 
     // read the song name (and remove non printable chars)
-    data_->readBytes(kSongTitleLength - 2, (char*)data_->pSong_->header->title);
-    for (int i = 0; i < kSongTitleLength - 2; i++)
-    {
-        if (data_->pSong_->header->title[i] < 32) {
-            data_->pSong_->header->title[i] = ' ';
-        }
-    }
+    data_->readString(kSongTitleLength, (char*)data_->pSong_->header->title);
 }
 
 #if DEBUG

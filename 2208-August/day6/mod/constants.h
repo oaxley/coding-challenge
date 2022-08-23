@@ -30,10 +30,10 @@ const uint8_t kMaxNumberSamples = 31;
 const uint8_t kMaxNumberPattern = 128;
 
 // max number of characters in the song title
-const uint8_t kSongTitleLength = 22;
+const uint8_t kSongTitleLength = 21;
 
 // max number of characters in the sample name
-const uint8_t kSampleNameLength = 24;
+const uint8_t kSampleNameLength = 23;
 
 // marker position in a Tracker file
 const uint16_t kMarkerPosition = 1080;
