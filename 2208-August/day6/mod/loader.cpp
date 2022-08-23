@@ -14,6 +14,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <memory>
 
 #include "constants.h"
 #include "structures.h"
@@ -62,12 +63,18 @@ void Loader::OpaqueData::create(std::string& filename)
     handle_.seekg(0, std::ios::beg);
 
     marker_ = std::string(buffer);
+
+    // allocate memory for the song structure
+    pSong_ = new Song;
+    if (pSong_ == nullptr) {
+        throw OutOfMemoryError("Unable to allocate memory for the song structure.");
+    }
 }
 
 /* destroy the internal structure */
 void Loader::OpaqueData::destroy()
 {
-
+    delete pSong_;
 }
 
 /* read a 16-bit word */
@@ -113,12 +120,14 @@ Loader::Loader(std::string& filename) :
     if (data_ == nullptr) {
         throw OutOfMemoryError("Unable to allocate memory during data initialization.");
     }
+
+    data_->create(filename);
 }
 
 /* destructor */
 Loader::~Loader()
 {
-
+    data_->destroy();
 }
 
 
