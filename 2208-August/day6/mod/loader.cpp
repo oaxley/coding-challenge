@@ -108,7 +108,23 @@ void Loader::OpaqueData::readBytes(uint16_t count, char* buffer)
     handle_.read(buffer, count);
 }
 
+/* print debug information */
+#if DEBUG
+void Loader::OpaqueData::printHeader()
+{
+    std::cout << "====== Music MOD Information ======" << std::endl;
+    std::cout << "Song Name   : " << pSong_->header->title << std::endl;
+    std::cout << "Song Length : " << static_cast<int>(pSong_->header->length) << std::endl;
+    std::cout << "Speed / BPM : " << static_cast<int>(pSong_->header->speed);
+    std::cout << " / " << static_cast<int>(pSong_->header->bpm) << std::endl;
+    std::cout << "Channels    : " << static_cast<int>(pSong_->header->channels) << std::endl;
+    std::cout << "Max Pattern : " << static_cast<int>(pSong_->header->max_pattern) << std::endl;
+}
+#endif
+
+
 //----- class
+
 /* constructor
  *
  * Args:
@@ -130,6 +146,72 @@ Loader::~Loader()
     data_->destroy();
 }
 
+/* check if the file is a valid MOD tracker file
+ *
+ * Returns:
+ *      true if the file is valid, false otherwise
+ */
+bool Loader::isValidFile()
+{
+    // check for this markers
+    std::string valid[] = { "M.K.", "4CHN", "6CHN", "8CHN" };
+
+    for (auto& marker : valid)
+    {
+        if (data_->marker_ == marker)
+            return true;
+    }
+
+    return false;
+}
+
+/* load the tracker song in memory */
+void Loader::load()
+{
+    // instantiate the header
+    data_->pSong_->header = std::make_unique<mod::file::Header>();
+    if (data_->pSong_->header == nullptr) {
+        throw OutOfMemoryError("Unable to allocate memory for MOD header");
+    }
+
+    // intialize the default values
+    data_->pSong_->header->bpm = 125;
+    data_->pSong_->header->speed = 6;
+    data_->pSong_->header->length = 0;
+    data_->pSong_->header->max_pattern = 0;
+    data_->pSong_->header->max_samples = 0;
+
+    // the number of channels is depending on the marker
+    if ((data_->marker_ == std::string("M.K.")) || (data_->marker_ == std::string("4CHN"))) {
+        data_->pSong_->header->channels = 4;
+    } else {
+        if (data_->marker_ == std::string("6CHN")) {
+            data_->pSong_->header->channels = 6;
+        } else {
+            if (data_->marker_ == std::string("8CHN")) {
+                data_->pSong_->header->channels = 8;
+            } else {
+                throw InvalidModParameter("Invalid number of channels.");
+            }
+        }
+    }
+
+    // read the song name (and remove non printable chars)
+    data_->readBytes(kSongTitleLength - 2, (char*)data_->pSong_->header->title);
+    for (int i = 0; i < kSongTitleLength - 2; i++)
+    {
+        if (data_->pSong_->header->title[i] < 32) {
+            data_->pSong_->header->title[i] = ' ';
+        }
+    }
+}
+
+#if DEBUG
+void Loader::printHeader()
+{
+    data_->printHeader();
+}
+#endif
 
 END_NAMESPACE(file)
 END_NAMESPACE(mod)
