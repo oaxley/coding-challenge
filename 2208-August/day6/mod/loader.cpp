@@ -12,7 +12,9 @@
  * @brief	MOD Tracker file loader - Implementation
  */
 
+#include <memory>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <memory>
 
@@ -121,15 +123,15 @@ void Loader::OpaqueData::readString(uint16_t count, char* buffer)
     handle_.read(buffer, count - 1);
 
     // remove non printable characters
-    for (int i = 0; i < count - 1; i++)
+    for (int i = 0; i < count - 2; i++)
     {
-        if ((buffer[i] > 0) && (buffer[i] < 32)) {
+        if (buffer[i] < 32) {
             buffer[i] = ' ';
         }
     }
 
     // properly terminate the string
-    buffer[count] = '\0';
+    buffer[count - 1] = '\0';
 }
 
 /* print debug information */
