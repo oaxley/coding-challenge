@@ -101,6 +101,16 @@ int main(int argc, char* argv[])
     {
         // create a new instance of the loader
         mod::file::Loader loader = mod::file::Loader(filename);
+        if (!loader.isValidFile()) {
+            printError("Error: file is not a valid MOD Tracker song");
+        }
+
+        // load the file
+        loader.load();
+
+#if DEBUG
+        loader.printHeader();
+#endif
     }
     catch(const std::exception& e)
     {
