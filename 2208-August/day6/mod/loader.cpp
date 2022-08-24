@@ -45,6 +45,7 @@ struct Loader::OpaqueData
 
     uint8_t loadChannelCount();
     uint8_t loadSampleInformation();
+    void loadPatternData();
 
 #if DEBUG
     void printHeader();
@@ -80,8 +81,17 @@ void Loader::OpaqueData::create(std::string& filename)
 void Loader::OpaqueData::destroy()
 {
     // delete the samples in the list
-    for (Sample* pSample : pSong_->samples)
+    for (Sample* pSample : pSong_->samples) {
+        // delete the sample data
+        delete [] pSample->pdata;
+
+        // delete the sample
         delete pSample;
+    }
+
+    // delete the pattern data
+    for (char* ptr : pSong_->patterns)
+        delete [] ptr;
 
     delete pSong_;
 }
@@ -213,6 +223,65 @@ uint8_t Loader::OpaqueData::loadSampleInformation()
     return samples;
 }
 
+/* load pattern data */
+void Loader::OpaqueData::loadPatternData()
+{
+    // init some vars
+    uint8_t channels = pSong_->header->channels;
+    uint8_t patterns = pSong_->header->max_pattern;
+    uint16_t pattern_size = kPatternMaxRows * channels * sizeof(Note);
+
+    // load all the patterns (<= as max_pattern is played too)
+    for (int i = 0; i <= patterns; i++)
+    {
+        // allocate memory for this pattern
+        char* pPattern = (char*) new char[pattern_size];
+        if (pPattern == nullptr) {
+            throw OutOfMemoryError("Unable to allocate memory for pattern data.");
+        }
+
+        // read each row / note from the file
+        char* ptr = pPattern;
+        for (int row = 0; row < kPatternMaxRows; row++)
+        {
+            for (int channel = 0; channel < channels; channel++)
+            {
+                // read a note
+                char buffer[4] = {0};
+                readBytes(4, buffer);
+
+                // point our note to the current pattern
+                Note* pNote = (Note*)ptr;
+
+                pNote->sample = ((buffer[0] & 0xF0) + (buffer[2] >> 4));
+                pNote->effect = buffer[2] & 0x0F;
+                pNote->parameters = buffer[3];
+
+                // convert the period to amiga note
+                uint16_t period = ((buffer[0] & 0x0F) << 8) + buffer[1];
+                uint8_t note = 0;
+                while (1)
+                {
+                    // break if we didn't find any note or we found it
+                    if ((kPeriodTable[note] == 0) || (period >= kPeriodTable[note])) {
+                        pNote->note = note;
+                        break;
+                    }
+
+                    // next note
+                    note++;
+                }
+
+                // move the pattern pointer
+                ptr += 4;
+            }
+        }
+
+        // attach the pattern to the song structure
+        pSong_->patterns.push_back(pPattern);
+    }
+}
+
 
 /* print debug information */
 #if DEBUG
@@ -339,6 +408,10 @@ void Loader::load()
 
     // transfer ownership of header to song object
     data_->pSong_->header = std::unique_ptr<Header>(hdr);
+
+    // load pattern data
+    data_->loadPatternData();
+
 }
 
 #if DEBUG

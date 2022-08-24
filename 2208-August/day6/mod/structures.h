@@ -51,10 +51,19 @@ typedef struct {
     uint8_t* pdata;                         // a pointer to the data in memory
 } Sample;
 
+// MOD Tracker note
+typedef struct {
+    uint8_t note;                           // note number
+    uint8_t sample;                         // sample number
+    uint8_t effect;                         // effect
+    uint8_t parameters;                     // effect parameters
+} Note;
+
 // MOD Tracker song
 typedef struct {
     std::unique_ptr<Header> header;
     std::list<Sample*> samples;
+    std::list<char*> patterns;
 } Song;
 
 END_NAMESPACE(file)
