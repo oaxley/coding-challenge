@@ -43,6 +43,9 @@ struct Loader::OpaqueData
     void readBytes(uint16_t count, char* buffer);
     void readString(uint16_t count, char* buffer);
 
+    uint8_t loadChannelCount();
+    uint8_t loadSampleInformation();
+
 #if DEBUG
     void printHeader();
 #endif
@@ -136,6 +139,80 @@ void Loader::OpaqueData::readString(uint16_t count, char* buffer)
     // properly terminate the string
     buffer[count - 1] = '\0';
 }
+
+/* determine the number of channels in thr file
+ *
+ * Returns:
+ *      The number of channels found in the file
+ */
+uint8_t Loader::OpaqueData::loadChannelCount()
+{
+    uint8_t channels = 0;
+
+    if ((marker_ == std::string("M.K.")) || (marker_ == std::string("4CHN"))) {
+        channels = 4;
+    } else {
+        if (marker_ == std::string("6CHN")) {
+            channels = 6;
+        } else {
+            if (marker_ == std::string("8CHN")) {
+                channels = 8;
+            } else {
+                throw InvalidModParameter("Invalid number of channels.");
+            }
+        }
+    }
+
+    return channels;
+}
+
+/* load samples information from the file
+ *
+ * Returns:
+ *      The number of samples found in the file
+ */
+uint8_t Loader::OpaqueData::loadSampleInformation()
+{
+    uint8_t samples = 0;
+
+    for (int i = 0; i < kMaxNumberSamples; i++)
+    {
+        // allocate memory for a new sample header
+        Sample* pSample = new Sample;
+        if (pSample == nullptr) {
+            throw OutOfMemoryError("Unable to allocate memory for Sample element.");
+        }
+
+        // data will be setup later
+        pSample->pdata = nullptr;
+
+        // read the sample name and remove non printable chars
+        readString(kSampleNameLength, (char*)pSample->name);
+
+        // sample length in bytes (stored as number of words)
+        pSample->length = readWord() * 2;
+        if (pSample->length > 0) {
+            samples++;
+        }
+
+        // finetune is between -8 and +7
+        char value = readByte();
+        pSample->finetune = (value > 7) ? (value - 16) : value;
+
+        // volume
+        pSample->volume = readByte();
+
+        // loops in bytes (stored as number of words)
+        pSample->loop_start = readWord() * 2;
+        pSample->loop_length = readWord() * 2;
+
+        // add the sample to the list
+        pSong_->samples.push_back(pSample);
+    }
+
+    return samples;
+}
+
 
 /* print debug information */
 #if DEBUG
@@ -232,64 +309,15 @@ void Loader::load()
     // intialize the default values
     hdr->bpm = 125;
     hdr->speed = 6;
-    hdr->length = 0;
-    hdr->max_pattern = 0;
-    hdr->max_samples = 0;
-    hdr->channels = 0;
 
-    // the number of channels is depending on the marker
-    if ((data_->marker_ == std::string("M.K.")) || (data_->marker_ == std::string("4CHN"))) {
-        hdr->channels = 4;
-    } else {
-        if (data_->marker_ == std::string("6CHN")) {
-            hdr->channels = 6;
-        } else {
-            if (data_->marker_ == std::string("8CHN")) {
-                hdr->channels = 8;
-            } else {
-                throw InvalidModParameter("Invalid number of channels.");
-            }
-        }
-    }
+    // number of channels
+    hdr->channels = data_->loadChannelCount();
 
     // read the song name (and remove non printable chars)
     data_->readString(kSongTitleLength, (char*)hdr->title);
 
     // read the samples information
-    for (int i = 0; i < kMaxNumberSamples; i++)
-    {
-        // allocate memory for a new sample header
-        Sample* pSample = new Sample;
-        if (pSample == nullptr) {
-            throw OutOfMemoryError("Unable to allocate memory for Sample element.");
-        }
-
-        // data will be setup later
-        pSample->pdata = nullptr;
-
-        // read the sample name and remove non printable chars
-        data_->readString(kSampleNameLength, (char*)pSample->name);
-
-        // sample length in bytes (stored as number of words)
-        pSample->length = data_->readWord() * 2;
-        if (pSample->length > 0) {
-            hdr->max_samples++;
-        }
-
-        // finetune is between -8 and +7
-        char value = data_->readByte();
-        pSample->finetune = (value > 7) ? (value - 16) : value;
-
-        // volume
-        pSample->volume = data_->readByte();
-
-        // loops in bytes (stored as number of words)
-        pSample->loop_start = data_->readWord() * 2;
-        pSample->loop_length = data_->readWord() * 2;
-
-        // add the sample to the list
-        data_->pSong_->samples.push_back(pSample);
-    }
+    hdr->max_samples = data_->loadSampleInformation();
 
     // song length
     hdr->length = data_->readByte();
