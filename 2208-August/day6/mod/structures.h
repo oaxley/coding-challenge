@@ -54,7 +54,7 @@ typedef struct {
 // MOD Tracker song
 typedef struct {
     std::unique_ptr<Header> header;
-    std::list<std::unique_ptr<Sample>> samples;
+    std::list<Sample*> samples;
 } Song;
 
 END_NAMESPACE(file)

@@ -16,7 +16,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <memory>
 
 #include "constants.h"
 #include "structures.h"
@@ -77,6 +76,10 @@ void Loader::OpaqueData::create(std::string& filename)
 /* destroy the internal structure */
 void Loader::OpaqueData::destroy()
 {
+    // delete the samples in the list
+    for (Sample* pSample : pSong_->samples)
+        delete pSample;
+
     delete pSong_;
 }
 
@@ -145,6 +148,32 @@ void Loader::OpaqueData::printHeader()
     std::cout << " / " << static_cast<int>(pSong_->header->bpm) << std::endl;
     std::cout << "Channels    : " << static_cast<int>(pSong_->header->channels) << std::endl;
     std::cout << "Max Pattern : " << static_cast<int>(pSong_->header->max_pattern) << std::endl;
+
+    std::cout << "Order       : ";
+
+    std::cout << "[ ";
+    for (int i = 0; i < pSong_->header->length; i++) {
+        std::cout << static_cast<int>(pSong_->header->order[i]) << " ";
+    }
+    std::cout << "]" << std::endl;
+
+    std::cout << "Max Samples : " << static_cast<int>(pSong_->header->max_samples) << std::endl;
+    int counter = 1;
+    for (Sample* pSample : pSong_->samples)
+    {
+        if (pSample->length > 0) {
+            std::cout << std::setw(2) << counter << " | ";
+            std::cout << std::setw(22) << pSample->name << " | ";
+            std::cout << std::setw(10) << static_cast<int>(pSample->length) << " | ";
+            std::cout << std::setw(7) << static_cast<int>(pSample->finetune) << " | ";
+            std::cout << std::setw(7) << static_cast<int>(pSample->volume) << " | ";
+            std::cout << std::setw(7) << static_cast<int>(pSample->loop_start) << " | ";
+            std::cout << std::setw(7) << static_cast<int>(pSample->loop_length) << " | ";
+            std::cout << std::endl;
+        }
+
+        counter++;
+    }
 }
 #endif
 
@@ -194,28 +223,29 @@ bool Loader::isValidFile()
 /* load the tracker song in memory */
 void Loader::load()
 {
-    // instantiate the header
-    data_->pSong_->header = std::make_unique<Header>();
-    if (data_->pSong_->header == nullptr) {
-        throw OutOfMemoryError("Unable to allocate memory for MOD header");
+    // instantiate a new header
+    Header* hdr = new Header();
+    if (hdr == nullptr) {
+        throw OutOfMemoryError("Unable to allocate memory for MODHeader.");
     }
 
     // intialize the default values
-    data_->pSong_->header->bpm = 125;
-    data_->pSong_->header->speed = 6;
-    data_->pSong_->header->length = 0;
-    data_->pSong_->header->max_pattern = 0;
-    data_->pSong_->header->max_samples = 0;
+    hdr->bpm = 125;
+    hdr->speed = 6;
+    hdr->length = 0;
+    hdr->max_pattern = 0;
+    hdr->max_samples = 0;
+    hdr->channels = 0;
 
     // the number of channels is depending on the marker
     if ((data_->marker_ == std::string("M.K.")) || (data_->marker_ == std::string("4CHN"))) {
-        data_->pSong_->header->channels = 4;
+        hdr->channels = 4;
     } else {
         if (data_->marker_ == std::string("6CHN")) {
-            data_->pSong_->header->channels = 6;
+            hdr->channels = 6;
         } else {
             if (data_->marker_ == std::string("8CHN")) {
-                data_->pSong_->header->channels = 8;
+                hdr->channels = 8;
             } else {
                 throw InvalidModParameter("Invalid number of channels.");
             }
@@ -223,7 +253,64 @@ void Loader::load()
     }
 
     // read the song name (and remove non printable chars)
-    data_->readString(kSongTitleLength, (char*)data_->pSong_->header->title);
+    data_->readString(kSongTitleLength, (char*)hdr->title);
+
+    // read the samples information
+    for (int i = 0; i < kMaxNumberSamples; i++)
+    {
+        // allocate memory for a new sample header
+        Sample* pSample = new Sample;
+        if (pSample == nullptr) {
+            throw OutOfMemoryError("Unable to allocate memory for Sample element.");
+        }
+
+        // data will be setup later
+        pSample->pdata = nullptr;
+
+        // read the sample name and remove non printable chars
+        data_->readString(kSampleNameLength, (char*)pSample->name);
+
+        // sample length in bytes (stored as number of words)
+        pSample->length = data_->readWord() * 2;
+        if (pSample->length > 0) {
+            hdr->max_samples++;
+        }
+
+        // finetune is between -8 and +7
+        char value = data_->readByte();
+        pSample->finetune = (value > 7) ? (value - 16) : value;
+
+        // volume
+        pSample->volume = data_->readByte();
+
+        // loops in bytes (stored as number of words)
+        pSample->loop_start = data_->readWord() * 2;
+        pSample->loop_length = data_->readWord() * 2;
+
+        // add the sample to the list
+        data_->pSong_->samples.push_back(pSample);
+    }
+
+    // song length
+    hdr->length = data_->readByte();
+
+    // unused
+    data_->readByte();
+
+    // pattern order information
+    uint8_t max_value = 0;
+    for (int i = 0; i < kMaxNumberPattern; i++)
+    {
+        uint8_t value = data_->readByte();
+        hdr->order[i] = value;
+        if (value > max_value) {
+            max_value = value;
+        }
+    }
+    hdr->max_pattern = max_value;
+
+    // transfer ownership of header to song object
+    data_->pSong_->header = std::unique_ptr<Header>(hdr);
 }
 
 #if DEBUG
