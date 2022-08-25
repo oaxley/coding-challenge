@@ -48,6 +48,8 @@ struct Loader::OpaqueData
     void loadPatternData();
     void loadSampleData();
 
+    const Song* getSongPtr();
+
 #if DEBUG
     void printHeader();
 #endif
@@ -301,6 +303,12 @@ void Loader::OpaqueData::loadSampleData()
     }
 }
 
+/* return a pointer to the song data structure */
+const Song* Loader::OpaqueData::getSongPtr()
+{
+    return pSong_;
+}
+
 /* print debug information */
 #if DEBUG
 void Loader::OpaqueData::printHeader()
@@ -432,6 +440,12 @@ void Loader::load()
 
     // load samples data
     data_->loadSampleData();
+}
+
+/* retrieve the pointer to the song data structure */
+const Song* Loader::getSong()
+{
+    return data_->getSongPtr();
 }
 
 #if DEBUG

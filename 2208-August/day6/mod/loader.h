@@ -18,7 +18,7 @@
 #include <memory>
 
 #include "../slMacros.h"
-
+#include "structures.h"
 
 
 BEGIN_NAMESPACE(mod)
@@ -32,6 +32,9 @@ class Loader
 
         bool isValidFile();
         void load();
+
+        const Song* getSong();
+
 #if DEBUG
         void printHeader();
 #endif
