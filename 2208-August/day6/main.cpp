@@ -172,20 +172,20 @@ int main(int argc, char* argv[])
         // execute the proper function
         switch (operation)
         {
-        case kDisplayInfo:
-            loader.printHeader();
-            break;
+            case kDisplayInfo:
+                loader.printHeader();
+                break;
 
-        case kDisplayTrack:
-            displayTrack(opvalue, loader.getSong());
-            break;
+            case kDisplayTrack:
+                displayTrack(opvalue, loader.getSong());
+                break;
 
-        case kPlaySample:
-            playSample(opvalue, loader.getSong(), audio_driver);
-            break;
+            case kPlaySample:
+                playSample(opvalue, loader.getSong(), audio_driver);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
 
         // close the connection
