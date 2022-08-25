@@ -393,7 +393,7 @@ bool Loader::isValidFile()
 }
 
 /* load the tracker song in memory */
-void Loader::load()
+uint16_t Loader::load()
 {
     // instantiate a new header
     Header* hdr = new Header();
@@ -446,6 +446,9 @@ void Loader::load()
 
     // load samples data
     data_->loadSampleData();
+
+    // return the number of bytes loaded
+    return data_->handle_.tellg();
 }
 
 /* retrieve the pointer to the song data structure */

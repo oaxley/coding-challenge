@@ -31,7 +31,7 @@ class Loader
         virtual ~Loader();
 
         bool isValidFile();
-        void load();
+        uint16_t load();
 
         const Song* getSong();
 
