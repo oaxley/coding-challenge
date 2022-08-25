@@ -249,8 +249,8 @@ void Loader::OpaqueData::loadPatternData()
             for (int channel = 0; channel < channels; channel++)
             {
                 // read a note
-                char buffer[4] = {0};
-                readBytes(4, buffer);
+                uint8_t buffer[4] = {0};
+                readBytes(4, (char*)&buffer[0]);
 
                 // point our note to the current pattern
                 Note* pNote = (Note*)ptr;
@@ -434,6 +434,12 @@ void Loader::load()
 
     // transfer ownership of header to song object
     data_->pSong_->header = std::unique_ptr<Header>(hdr);
+
+    // bypass the MOD marker
+    data_->readByte();
+    data_->readByte();
+    data_->readByte();
+    data_->readByte();
 
     // load pattern data
     data_->loadPatternData();
