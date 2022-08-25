@@ -26,7 +26,6 @@ struct AlsaDriver::OpaqueData
 {
     // members
     snd_pcm_t* device;
-    Parameters* params;
 
     // methods
     void create();
@@ -37,7 +36,6 @@ struct AlsaDriver::OpaqueData
 void AlsaDriver::OpaqueData::create()
 {
     device = nullptr;
-    params = nullptr;
 }
 
 // destroy the structure
@@ -67,10 +65,10 @@ AlsaDriver::~AlsaDriver()
 void AlsaDriver::open(Parameters* pParams)
 {
     // keep track of the pointer
-    data_->params = pParams;
+    pParams_ = pParams;
 
     // open the device
-    int err = snd_pcm_open(&data_->device, data_->params->name, SND_PCM_STREAM_PLAYBACK, 0);
+    int err = snd_pcm_open(&data_->device, pParams->name, SND_PCM_STREAM_PLAYBACK, 0);
     if (err < 0) {
         throw AudioError("Unable to open the Audio Interface.");
     }
@@ -101,8 +99,8 @@ void AlsaDriver::setup()
     error = snd_pcm_set_params(data_->device,
                                SND_PCM_FORMAT_FLOAT,
                                SND_PCM_ACCESS_RW_INTERLEAVED,
-                               data_->params->channels,
-                               data_->params->rate,
+                               pParams_->channels,
+                               pParams_->rate,
                                1,
                                500'000
     );

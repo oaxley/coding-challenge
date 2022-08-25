@@ -25,7 +25,6 @@ BEGIN_NAMESPACE(audio)
 struct PulseDriver::OpaqueData
 {
     // members
-    Parameters* params;
     pa_simple* hndPulse;
 
     // methods
@@ -36,7 +35,6 @@ struct PulseDriver::OpaqueData
 // initialize the structure
 void PulseDriver::OpaqueData::create()
 {
-    params = nullptr;
     hndPulse = nullptr;
 }
 
@@ -67,7 +65,7 @@ PulseDriver::~PulseDriver()
 void PulseDriver::open(Parameters* pParams)
 {
     // keep track of the pointer
-    data_->params = pParams;
+    pParams_ = pParams;
 
     // sample format specifications
     pa_sample_spec ss = {

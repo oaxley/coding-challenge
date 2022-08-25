@@ -39,7 +39,12 @@ class IDriver
         virtual void setup() = 0;
         virtual void push(char* buffer, int frames, int count) = 0;
 
-    private:    // private members
+        const Parameters* getParams() {
+            return pParams_;
+        }
+
+    protected:    // protected members
+        Parameters* pParams_ = nullptr;
 };
 
 END_NAMESPACE(audio)
