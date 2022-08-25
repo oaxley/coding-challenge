@@ -22,6 +22,8 @@
 #include "Audio/Audio.h"
 #include "mod/loader.h"
 
+#include "displaytrack.h"
+
 
 //----- globals
 
@@ -145,6 +147,10 @@ int main(int argc, char* argv[])
         {
         case kDisplayInfo:
             loader.printHeader();
+            break;
+
+        case kDisplayTrack:
+            displayTrack(opvalue, loader.getSong());
             break;
 
         default:
