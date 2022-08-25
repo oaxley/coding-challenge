@@ -16,6 +16,7 @@
 
 //----- includes
 #include <list>
+#include <vector>
 #include <memory>
 #include <cstdint>
 
@@ -62,8 +63,8 @@ typedef struct {
 // MOD Tracker song
 typedef struct {
     std::unique_ptr<Header> header;
-    std::list<Sample*> samples;
-    std::list<char*> patterns;
+    std::vector<Sample*> samples;
+    std::vector<char*> patterns;
 } Song;
 
 END_NAMESPACE(file)
