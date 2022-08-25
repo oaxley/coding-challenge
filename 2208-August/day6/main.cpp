@@ -23,6 +23,7 @@
 #include "mod/loader.h"
 
 #include "displaytrack.h"
+#include "playsample.h"
 
 
 //----- globals
@@ -133,6 +134,32 @@ int main(int argc, char* argv[])
 
     try
     {
+        // initialize audio driver
+        audio::IDriver* audio_driver = nullptr;
+        switch (driver)
+        {
+            case audio::kAlsa:
+                std::cout << "selecting Alsa audio driver." << std::endl;
+                audio_driver = new audio::AlsaDriver();
+                break;
+            case audio::kPulseAudio:
+                std::cout << "selecting Pulse Audio driver." << std::endl;
+                audio_driver = new audio::PulseDriver();
+                break;
+        }
+
+        // audio parameters
+        audio::Parameters params = {
+            .name = "modplayer",
+            .channels = 2,
+            .format = 0,        // unused
+            .rate = 22050
+        };
+
+        // open the audio driver connection
+        audio_driver->open(&params);
+        audio_driver->setup();
+
         // create a new instance of the loader
         mod::file::Loader loader = mod::file::Loader(filename);
         if (!loader.isValidFile()) {
@@ -153,9 +180,16 @@ int main(int argc, char* argv[])
             displayTrack(opvalue, loader.getSong());
             break;
 
+        case kPlaySample:
+            playSample(opvalue, loader.getSong(), audio_driver);
+            break;
+
         default:
             break;
         }
+
+        // close the connection
+        audio_driver->close();
     }
     catch(const std::exception& e)
     {
