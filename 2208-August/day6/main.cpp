@@ -15,13 +15,23 @@
 //----- includes
 #include <getopt.h>
 
-#include <iostream>
-#include <cstdlib>
 #include <string>
+#include <iostream>
 #include <filesystem>
 
 #include "Audio/Audio.h"
 #include "mod/loader.h"
+
+
+//----- globals
+
+// oeration types
+typedef enum {
+    kPlaySong,
+    kPlaySample,
+    kDisplayTrack,
+    kDisplayInfo,
+} OperationEnum;
 
 
 //----- functions
@@ -35,6 +45,9 @@ void help()
     std::cout << "options:" << std::endl;
     std::cout << "    --file/-f   : path to the mod tracker file" << std::endl;
     std::cout << "    --driver/-d : audio driver (default: pulse)" << std::endl;
+    std::cout << "    --sample/-s : play sample with audio driver" << std::endl;
+    std::cout << "    --track/-t  : display track information" << std::endl;
+    std::cout << "    --info/-i   : display song information" << std::endl;
     std::cout << "    --help/-h   : this help" << std::endl;
     std::cout << std::endl;
 }
@@ -55,12 +68,17 @@ void printError(const char* message)
 int main(int argc, char* argv[])
 {
     audio::DriverEnum driver = audio::kPulseAudio;
+    OperationEnum operation = kPlaySong;        // default operation
     std::string filename = "";
+    int opvalue;
 
     // command line options
     struct option long_options[] = {
         {"driver", required_argument, 0, 'd'},
         {"file",   required_argument, 0, 'f'},
+        {"sample", required_argument, 0, 's'},
+        {"track",  required_argument, 0, 't'},
+        {"info",   no_argument,       0, 'i'},
         {"help",   no_argument,       0, 'h'},
         {0       , 0,                 0, 0}
     };
@@ -68,7 +86,7 @@ int main(int argc, char* argv[])
     // process command line arguments
     int long_index = 0;
     int opt;
-    while ((opt = getopt_long(argc, argv, "f:d:h", long_options, &long_index)) != -1) {
+    while ((opt = getopt_long(argc, argv, "f:d:s:t:ih", long_options, &long_index)) != -1) {
         switch (opt)
         {
         case 'd':
@@ -79,6 +97,20 @@ int main(int argc, char* argv[])
 
         case 'f':
             filename = std::string(optarg);
+            break;
+
+        case 's':   // play sample
+            operation = kPlaySample;
+            opvalue = std::stoi(optarg);
+            break;
+
+        case 't':   // display track
+            operation = kDisplayTrack;
+            opvalue = std::stoi(optarg);
+            break;
+
+        case 'i':   // display information
+            operation = kDisplayInfo;
             break;
 
         default:
@@ -108,9 +140,16 @@ int main(int argc, char* argv[])
         // load the file
         loader.load();
 
-#if DEBUG
-        loader.printHeader();
-#endif
+        // execute the proper function
+        switch (operation)
+        {
+        case kDisplayInfo:
+            loader.printHeader();
+            break;
+
+        default:
+            break;
+        }
     }
     catch(const std::exception& e)
     {
