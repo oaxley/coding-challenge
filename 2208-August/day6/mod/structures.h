@@ -48,7 +48,7 @@ typedef struct {
     uint16_t loop_start;                    // loop start
     uint16_t loop_length;                   // loop length
 
-    uint8_t* pdata;                         // a pointer to the data in memory
+    char* pData;                            // a pointer to the data in memory
 } Sample;
 
 // MOD Tracker note

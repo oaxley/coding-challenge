@@ -46,6 +46,7 @@ struct Loader::OpaqueData
     uint8_t loadChannelCount();
     uint8_t loadSampleInformation();
     void loadPatternData();
+    void loadSampleData();
 
 #if DEBUG
     void printHeader();
@@ -83,7 +84,7 @@ void Loader::OpaqueData::destroy()
     // delete the samples in the list
     for (Sample* pSample : pSong_->samples) {
         // delete the sample data
-        delete [] pSample->pdata;
+        delete [] pSample->pData;
 
         // delete the sample
         delete pSample;
@@ -194,7 +195,7 @@ uint8_t Loader::OpaqueData::loadSampleInformation()
         }
 
         // data will be setup later
-        pSample->pdata = nullptr;
+        pSample->pData = nullptr;
 
         // read the sample name and remove non printable chars
         readString(kSampleNameLength, (char*)pSample->name);
@@ -282,6 +283,24 @@ void Loader::OpaqueData::loadPatternData()
     }
 }
 
+/* load samples data from the file */
+void Loader::OpaqueData::loadSampleData()
+{
+    for (auto it : pSong_->samples)
+    {
+        // only samples with a length > 0 are present in the file
+        if (it->length > 0) {
+            // allocate enough memory for this sample
+            it->pData = (char*) new char[it->length];
+            if (it->pData == nullptr) {
+                throw OutOfMemoryError("Unable to allocate memory for sample data.");
+            }
+
+            // load the data from the file
+            readBytes(it->length, it->pData);
+        }
+    }
+}
 
 /* print debug information */
 #if DEBUG
@@ -412,6 +431,8 @@ void Loader::load()
     // load pattern data
     data_->loadPatternData();
 
+    // load samples data
+    data_->loadSampleData();
 }
 
 #if DEBUG
