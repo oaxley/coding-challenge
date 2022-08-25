@@ -118,7 +118,7 @@ void AlsaDriver::setup()
 }
 
 /* push data to Alsa */
-void AlsaDriver::push(float* buffer, int frames, int count)
+void AlsaDriver::push(char* buffer, int frames, int count)
 {
     while(count--) {
         int retval = snd_pcm_writei(data_->device, buffer, frames);

@@ -37,7 +37,7 @@ class IDriver
         virtual void open(Parameters* pParams) = 0;
         virtual void close() = 0;
         virtual void setup() = 0;
-        virtual void push(float* buffer, int frames, int count) = 0;
+        virtual void push(char* buffer, int frames, int count) = 0;
 
     private:    // private members
 };

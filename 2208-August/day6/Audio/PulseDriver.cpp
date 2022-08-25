@@ -71,7 +71,7 @@ void PulseDriver::open(Parameters* pParams)
 
     // sample format specifications
     pa_sample_spec ss = {
-        .format = PA_SAMPLE_FLOAT32,        // manually set for now
+        .format = PA_SAMPLE_U8,        // manually set for now
         .rate = static_cast<unsigned int>(pParams->rate),
         .channels = static_cast<unsigned char>(pParams->channels)
     };
@@ -107,7 +107,7 @@ void PulseDriver::setup()
     // nothing to be done here
 }
 
-void PulseDriver::push(float* buffer, int frames, int count)
+void PulseDriver::push(char* buffer, int frames, int count)
 {
     int error;
     while (count--) {

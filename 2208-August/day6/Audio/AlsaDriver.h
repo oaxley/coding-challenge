@@ -36,7 +36,7 @@ class AlsaDriver : public IDriver
         virtual void open(Parameters* pParams);
         virtual void close();
         virtual void setup();
-        virtual void push(float* buffer, int frames, int count);
+        virtual void push(char* buffer, int frames, int count);
 
     private:    // private members
         struct OpaqueData;
