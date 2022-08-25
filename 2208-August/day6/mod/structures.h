@@ -43,7 +43,7 @@ typedef struct
 typedef struct {
     uint8_t name[kSampleNameLength];        // sample name
     uint16_t length;                        // sample length
-    int8_t finetune;                        // finetune value
+    int16_t finetune;                       // finetune value
     uint8_t volume;                         // sample volume
     uint16_t loop_start;                    // loop start
     uint16_t loop_length;                   // loop length

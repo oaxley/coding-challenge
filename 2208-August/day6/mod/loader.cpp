@@ -206,9 +206,8 @@ uint8_t Loader::OpaqueData::loadSampleInformation()
             samples++;
         }
 
-        // finetune is between -8 and +7
-        char value = readByte();
-        pSample->finetune = (value > 7) ? (value - 16) : value;
+        // finetune
+        pSample->finetune = kFineTuneHertz[readByte() % 16];
 
         // volume
         pSample->volume = readByte();
