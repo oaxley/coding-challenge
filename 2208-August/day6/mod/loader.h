@@ -35,9 +35,7 @@ class Loader
 
         const Song* getSong();
 
-#if DEBUG
         void printHeader();
-#endif
 
     private:
         struct OpaqueData;

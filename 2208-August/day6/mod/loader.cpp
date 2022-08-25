@@ -12,6 +12,8 @@
  * @brief	MOD Tracker file loader - Implementation
  */
 
+#include "loader.h"
+
 #include <memory>
 #include <fstream>
 #include <iomanip>
@@ -20,7 +22,6 @@
 #include "constants.h"
 #include "structures.h"
 #include "exceptions.h"
-#include "loader.h"
 
 
 BEGIN_NAMESPACE(mod)
@@ -50,9 +51,7 @@ struct Loader::OpaqueData
 
     const Song* getSongPtr();
 
-#if DEBUG
     void printHeader();
-#endif
 };
 
 /* initialize the internal structure
@@ -228,6 +227,10 @@ uint8_t Loader::OpaqueData::loadSampleInformation()
 /* load pattern data */
 void Loader::OpaqueData::loadPatternData()
 {
+#if DEBUG
+    std::cerr << "Pattern Data starting at offset " << handle_.tellg() << std::endl;
+#endif
+
     // init some vars
     uint8_t channels = pSong_->header->channels;
     uint8_t patterns = pSong_->header->max_pattern;
@@ -287,6 +290,10 @@ void Loader::OpaqueData::loadPatternData()
 /* load samples data from the file */
 void Loader::OpaqueData::loadSampleData()
 {
+#if DEBUG
+    std::cerr << "Sample Data starting at offset " << handle_.tellg() << std::endl;
+#endif
+
     for (auto it : pSong_->samples)
     {
         // only samples with a length > 0 are present in the file
@@ -310,7 +317,6 @@ const Song* Loader::OpaqueData::getSongPtr()
 }
 
 /* print debug information */
-#if DEBUG
 void Loader::OpaqueData::printHeader()
 {
     std::cout << "====== Music MOD Information ======" << std::endl;
@@ -348,7 +354,6 @@ void Loader::OpaqueData::printHeader()
         counter++;
     }
 }
-#endif
 
 
 //----- class
@@ -458,12 +463,10 @@ const Song* Loader::getSong()
     return data_->getSongPtr();
 }
 
-#if DEBUG
 void Loader::printHeader()
 {
     data_->printHeader();
 }
-#endif
 
 END_NAMESPACE(file)
 END_NAMESPACE(mod)
