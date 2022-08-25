@@ -209,7 +209,7 @@ uint8_t Loader::OpaqueData::loadSampleInformation()
         }
 
         // finetune
-        pSample->finetune = kFineTuneHertz[readByte() % 16];
+        pSample->finetune = readByte();
 
         // volume
         pSample->volume = readByte();
@@ -334,10 +334,11 @@ void Loader::OpaqueData::printHeader()
     for (Sample* pSample : pSong_->samples)
     {
         if (pSample->length > 0) {
+            int finetune = static_cast<int>(pSample->finetune);
             std::cout << std::setw(2) << counter << " | ";
             std::cout << std::setw(22) << pSample->name << " | ";
             std::cout << std::setw(10) << static_cast<int>(pSample->length) << " | ";
-            std::cout << std::setw(7) << static_cast<int>(pSample->finetune) << " | ";
+            std::cout << std::setw(7) <<  ((finetune > 7) ? finetune - 16 : finetune) << " | ";
             std::cout << std::setw(7) << static_cast<int>(pSample->volume) << " | ";
             std::cout << std::setw(7) << static_cast<int>(pSample->loop_start) << " | ";
             std::cout << std::setw(7) << static_cast<int>(pSample->loop_length) << " | ";
