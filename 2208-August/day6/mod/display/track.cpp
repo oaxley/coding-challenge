@@ -9,18 +9,20 @@
  * @author	Sebastien LEGRAND
  * @license	Apache License 2.0
  *
- * @brief	Function to display information on a particular track
+ * @brief	Function to display track information
  */
 
 //----- includes
-#include "displaytrack.h"
+#include "display.h"
 
 #include <iostream>
 #include <iomanip>
 
-#include "mod/loader.h"
-#include "mod/constants.h"
+#include "../constants.h"
+#include "../structures.h"
 
+BEGIN_NAMESPACE(mod)
+BEGIN_NAMESPACE(display)
 
 //----- globals
 // mapping table Period <-> Note
@@ -35,7 +37,7 @@ const char* kNoteName[] = {
 
 
 //----- functions
-void displayTrack(int track, const mod::file::Song* pSong)
+void track(int track, const mod::Song* pSong)
 {
     if ((track < 0) || (track > pSong->header->max_pattern)) {
         std::cerr << "Error: track value should be between 0 and " << (int)pSong->header->max_pattern;
@@ -46,14 +48,14 @@ void displayTrack(int track, const mod::file::Song* pSong)
     // retrieve the track information
     auto pTrack = pSong->patterns[track];
 
-    for (int row = 0; row < mod::file::kPatternMaxRows; ++row)
+    for (int row = 0; row < mod::kPatternMaxRows; ++row)
     {
         std::cout << " " << std::setw(2) << std::setfill('0') << std::hex;
         std::cout << std::uppercase << row << std::dec << " | ";
 
         for (int ch = 0; ch < pSong->header->channels; ++ch)
         {
-            mod::file::Note* pNote = (mod::file::Note*)pTrack;
+            mod::Note* pNote = (mod::Note*)pTrack;
 
             const char* note_name = kNoteName[(int)pNote->note];
             int sample = (int)pNote->sample;
@@ -93,3 +95,6 @@ void displayTrack(int track, const mod::file::Song* pSong)
         std::cout << std::endl;
     }
 }
+
+END_NAMESPACE(display)
+END_NAMESPACE(mod)

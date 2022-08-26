@@ -25,7 +25,6 @@
 
 
 BEGIN_NAMESPACE(mod)
-BEGIN_NAMESPACE(file)
 
 // MOD Tracker header
 typedef struct
@@ -67,7 +66,6 @@ typedef struct {
     std::vector<char*> patterns;
 } Song;
 
-END_NAMESPACE(file)
 END_NAMESPACE(mod)
 
 #endif // MOD_STRUCTURES_H

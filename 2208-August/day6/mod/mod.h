@@ -9,23 +9,17 @@
  * @author	Sebastien LEGRAND
  * @license	Apache License 2.0
  *
- * @brief	Main header file for Audio namespace
+ * @brief	MOD package main header
  */
+#ifndef MOD_H
+#define MOD_H
 
-//----- includes
-#include "../slMacros.h"
+#include "constants.h"
+#include "structures.h"
+#include "exceptions.h"
 
-#include "idriver.h"
-#include "except.h"
-#include "AlsaDriver.h"
-#include "PulseDriver.h"
+#include "display/display.h"
+#include "file/loader.h"
+#include "play/play.h"
 
-
-BEGIN_NAMESPACE(audio)
-
-typedef enum {
-    kAlsa,
-    kPulseAudio,
-} DriverEnum;
-
-END_NAMESPACE(audio)
+#endif // MOD_H

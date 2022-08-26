@@ -19,9 +19,9 @@
 #include <iomanip>
 #include <iostream>
 
-#include "constants.h"
-#include "structures.h"
-#include "exceptions.h"
+#include "../constants.h"
+#include "../structures.h"
+#include "../exceptions.h"
 
 
 BEGIN_NAMESPACE(mod)
@@ -50,8 +50,6 @@ struct Loader::OpaqueData
     void loadSampleData();
 
     const Song* getSongPtr();
-
-    void printHeader();
 };
 
 /* initialize the internal structure
@@ -316,45 +314,6 @@ const Song* Loader::OpaqueData::getSongPtr()
     return pSong_;
 }
 
-/* print debug information */
-void Loader::OpaqueData::printHeader()
-{
-    std::cout << "====== Music MOD Information ======" << std::endl;
-    std::cout << "Song Name   : " << pSong_->header->title << std::endl;
-    std::cout << "Song Length : " << static_cast<int>(pSong_->header->length) << std::endl;
-    std::cout << "Speed / BPM : " << static_cast<int>(pSong_->header->speed);
-    std::cout << " / " << static_cast<int>(pSong_->header->bpm) << std::endl;
-    std::cout << "Channels    : " << static_cast<int>(pSong_->header->channels) << std::endl;
-    std::cout << "Max Pattern : " << static_cast<int>(pSong_->header->max_pattern) << std::endl;
-
-    std::cout << "Order       : ";
-
-    std::cout << "[ ";
-    for (int i = 0; i < pSong_->header->length; i++) {
-        std::cout << static_cast<int>(pSong_->header->order[i]) << " ";
-    }
-    std::cout << "]" << std::endl;
-
-    std::cout << "Max Samples : " << static_cast<int>(pSong_->header->max_samples) << std::endl;
-    int counter = 1;
-    for (Sample* pSample : pSong_->samples)
-    {
-        if (pSample->length > 0) {
-            int finetune = static_cast<int>(pSample->finetune);
-            std::cout << std::setw(2) << counter << " | ";
-            std::cout << std::setw(22) << pSample->name << " | ";
-            std::cout << std::setw(10) << static_cast<int>(pSample->length) << " | ";
-            std::cout << std::setw(7) <<  ((finetune > 7) ? finetune - 16 : finetune) << " | ";
-            std::cout << std::setw(7) << static_cast<int>(pSample->volume) << " | ";
-            std::cout << std::setw(7) << static_cast<int>(pSample->loop_start) << " | ";
-            std::cout << std::setw(7) << static_cast<int>(pSample->loop_length) << " | ";
-            std::cout << std::endl;
-        }
-
-        counter++;
-    }
-}
-
 
 //----- class
 
@@ -461,11 +420,6 @@ uint16_t Loader::load()
 const Song* Loader::getSong()
 {
     return data_->getSongPtr();
-}
-
-void Loader::printHeader()
-{
-    data_->printHeader();
 }
 
 END_NAMESPACE(file)

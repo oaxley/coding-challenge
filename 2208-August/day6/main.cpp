@@ -19,11 +19,8 @@
 #include <iostream>
 #include <filesystem>
 
-#include "Audio/Audio.h"
-#include "mod/loader.h"
-
-#include "displaytrack.h"
-#include "playsample.h"
+#include "audio/audio.h"
+#include "mod/mod.h"
 
 
 //----- globals
@@ -173,15 +170,15 @@ int main(int argc, char* argv[])
         switch (operation)
         {
             case kDisplayInfo:
-                loader.printHeader();
+                mod::display::header(loader.getSong());
                 break;
 
             case kDisplayTrack:
-                displayTrack(opvalue, loader.getSong());
+                mod::display::track(opvalue, loader.getSong());
                 break;
 
             case kPlaySample:
-                playSample(opvalue, loader.getSong(), audio_driver);
+                mod::play::sample(opvalue, loader.getSong(), audio_driver);
                 break;
 
             default:

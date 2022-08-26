@@ -19,9 +19,7 @@
 
 #include "../slMacros.h"
 
-
 BEGIN_NAMESPACE(mod)
-BEGIN_NAMESPACE(file)
 
 // max number of samples in a MOD tracker file
 const uint8_t kMaxNumberSamples = 31;
@@ -61,7 +59,6 @@ const uint16_t kFineTuneHertz[] = {
 const uint16_t kDefaultNote = kFineTuneHertz[0];
 
 
-END_NAMESPACE(file)
 END_NAMESPACE(mod)
 
 #endif // MOD_CONSTANTS_H

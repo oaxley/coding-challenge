@@ -9,25 +9,27 @@
  * @author	Sebastien LEGRAND
  * @license	Apache License 2.0
  *
- * @brief	Play a MOD sample
+ * @brief	Function to play a sample
  */
 
 //----- includes
-#include "playsample.h"
+#include "play.h"
 
 #include <unistd.h>
 
 #include <iostream>
 #include <cstring>
 
-#include "mod/constants.h"
-#include "mod/structures.h"
-#include "Audio/idriver.h"
+#include "../constants.h"
+#include "../structures.h"
+#include "../../audio/idriver.h"
 
 
+BEGIN_NAMESPACE(mod)
+BEGIN_NAMESPACE(play)
 
-//----- function
-void playSample(int sample, const mod::file::Song* pSong, audio::IDriver* pDriver)
+
+void sample(int sample, const mod::Song* pSong, audio::IDriver* pDriver)
 {
     // check boundaries
     if ((sample <= 0) || (sample > pSong->header->max_samples)) {
@@ -37,7 +39,7 @@ void playSample(int sample, const mod::file::Song* pSong, audio::IDriver* pDrive
     }
 
     // retrieve a pointer to the audio data
-    mod::file::Sample *sample_hdr = pSong->samples[sample - 1];
+    mod::Sample *sample_hdr = pSong->samples[sample - 1];
     if (sample_hdr->length == 0) {
         std::cout << "Nothing to play as sample is empty." << std::endl;
         return;
@@ -52,7 +54,7 @@ void playSample(int sample, const mod::file::Song* pSong, audio::IDriver* pDrive
     const audio::Parameters* pParams = pDriver->getParams();
 
     // compute the sample rate and its total length
-    float sample_rate = mod::file::kFineTuneHertz[sample_hdr->finetune];
+    float sample_rate = mod::kFineTuneHertz[sample_hdr->finetune];
     float duration = sample_hdr->length / sample_rate;
     std::cout << "Sample: rate = " << sample_rate << " ";
     std::cout << "duration = " << duration << std::endl;
@@ -114,3 +116,6 @@ void playSample(int sample, const mod::file::Song* pSong, audio::IDriver* pDrive
     delete [] pBuffer;
 
 }
+
+END_NAMESPACE(play)
+END_NAMESPACE(mod)

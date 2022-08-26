@@ -9,16 +9,27 @@
  * @author	Sebastien LEGRAND
  * @license	Apache License 2.0
  *
- * @brief	Play a MOD sample
+ * @brief	Main header file for Audio namespace
  */
-#ifndef PLAY_SAMPLE_H
-#define PLAY_SAMPLE_H
+#ifndef AUDIO_H
+#define AUDIO_H
 
 //----- includes
-#include "mod/structures.h"
-#include "Audio/idriver.h"
+#include "../slMacros.h"
 
-void playSample(int sample, const mod::file::Song* pSong, audio::IDriver* pDriver);
+#include "idriver.h"
+#include "except.h"
+#include "AlsaDriver.h"
+#include "PulseDriver.h"
 
 
-#endif // PLAY_SAMPLE_H
+BEGIN_NAMESPACE(audio)
+
+typedef enum {
+    kAlsa,
+    kPulseAudio,
+} DriverEnum;
+
+END_NAMESPACE(audio)
+
+#endif // AUDIO_H
