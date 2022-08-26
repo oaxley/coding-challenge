@@ -136,8 +136,9 @@ int main(int argc, char* argv[])
         switch (driver)
         {
             case audio::kAlsa:
-                std::cout << "selecting Alsa audio driver." << std::endl;
-                audio_driver = new audio::AlsaDriver();
+                // std::cout << "selecting Alsa audio driver." << std::endl;
+                // audio_driver = new audio::AlsaDriver();
+                printError("Error: AlsaDriver not supported.");
                 break;
             case audio::kPulseAudio:
                 std::cout << "selecting Pulse Audio driver." << std::endl;
