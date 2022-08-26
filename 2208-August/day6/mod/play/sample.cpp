@@ -54,8 +54,11 @@ void sample(int sample, const mod::Song* pSong, audio::IDriver* pDriver)
     const audio::Parameters* pParams = pDriver->getParams();
 
     // compute the sample rate and its total length
-    float sample_rate = mod::kFineTuneHertz[sample_hdr->finetune];
-    float duration = sample_hdr->length / sample_rate;
+    uint16_t sample_rate = amigaFrequency(
+            amigaPeriod(kDefaultNote, sample_hdr->finetune)
+    );
+
+    float duration = (float)sample_hdr->length / (float)sample_rate;
     std::cout << "Sample: rate = " << sample_rate << " ";
     std::cout << "duration = " << duration << std::endl;
 
@@ -66,7 +69,7 @@ void sample(int sample, const mod::Song* pSong, audio::IDriver* pDriver)
 #endif
 
     // resampling increment
-    float incr = sample_rate / pParams->rate;
+    int incr = (sample_rate * 100) / pParams->rate;
 #if DEBUG
     std::cerr << "resampling incr = " << incr << std::endl;
 #endif
@@ -74,10 +77,18 @@ void sample(int sample, const mod::Song* pSong, audio::IDriver* pDriver)
     // sample data and audio buffer counter
     char* pData = sample_hdr->pData;
     int bufcount = 0;
+    int acc = 0;            // accumulator
+    int pos = 0;            // sample position
     for (int i = 0; i < max_length; i++)
     {
         int value;
-        int pos = (int)(i*incr);
+
+        // keep accumulating the delta
+        acc = acc + incr;
+        if (acc > 100) {
+            pos = pos + 1;
+            acc -= 100;
+        }
 
         if (pos > sample_hdr->length) {
             value = 0;

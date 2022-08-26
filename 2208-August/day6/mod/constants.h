@@ -49,14 +49,11 @@ const uint16_t kPeriodTable[] = {
       0,   0,
 };
 
-// FineTune vs Hertz convertion table
-const uint16_t kFineTuneHertz[] = {
-    8363, 8413, 8463, 8529, 8581, 8651, 8723, 8757,
-    7895, 7941, 7985, 8046, 8107, 8169, 8232, 8280
-};
+// default note value (C-2 / 428)
+const uint16_t kDefaultNote = 24;
 
-// default note value
-const uint16_t kDefaultNote = kFineTuneHertz[0];
+// default frequency for base period computations
+const float kDefaultPeriodFreq = 7159090.5;
 
 
 END_NAMESPACE(mod)
