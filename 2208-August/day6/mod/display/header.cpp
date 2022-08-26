@@ -52,7 +52,7 @@ void header(const mod::Song* pSong)
             std::cout << std::setw(2) << counter << " | ";
             std::cout << std::setw(22) << pSample->name << " | ";
             std::cout << std::setw(10) << static_cast<int>(pSample->length) << " | ";
-            std::cout << std::setw(7) <<  ((finetune > 7) ? finetune - 16 : finetune) << " | ";
+            std::cout << std::setw(7) << static_cast<int>((finetune > 7) ? finetune - 16 : finetune) << " | ";
             std::cout << std::setw(7) << static_cast<int>(pSample->volume) << " | ";
             std::cout << std::setw(7) << static_cast<int>(pSample->loop_start) << " | ";
             std::cout << std::setw(7) << static_cast<int>(pSample->loop_length) << " | ";
