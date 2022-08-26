@@ -32,8 +32,8 @@ BEGIN_NAMESPACE(play)
 void sample(int sample, const mod::Song* pSong, audio::IDriver* pDriver)
 {
     // check boundaries
-    if ((sample <= 0) || (sample > pSong->header->max_samples)) {
-        std::cerr << "Error: sample value should be between 1 and " << (int)pSong->header->max_samples;
+    if ((sample <= 0) || (sample > kMaxNumberSamples)) {
+        std::cerr << "Error: sample value should be between 1 and " << (int)kMaxNumberSamples;
         std::cerr << std::endl;
         return;
     }
@@ -44,6 +44,10 @@ void sample(int sample, const mod::Song* pSong, audio::IDriver* pDriver)
         std::cout << "Nothing to play as sample is empty." << std::endl;
         return;
     }
+
+    // no data, nothing to play
+    if (sample_hdr->length == 0)
+        return;
 
     // audio buffer
     const int bufsize = 1024;
