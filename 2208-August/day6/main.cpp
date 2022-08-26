@@ -181,7 +181,9 @@ int main(int argc, char* argv[])
                 mod::play::sample(opvalue, loader.getSong(), audio_driver);
                 break;
 
+            case kPlaySong:
             default:
+                mod::play::song(loader.getSong(), audio_driver);
                 break;
         }
 
