@@ -22,12 +22,6 @@
 BEGIN_NAMESPACE(mod)
 BEGIN_NAMESPACE(play)
 
-// compute the corresponding amiga period from a base note and a finetune
-uint16_t amigaPeriod(uint8_t note, uint8_t finetune);
-
-// compute the amiga frequency from an amiga period value
-uint16_t amigaFrequency(uint16_t period);
-
 // function to play a sample
 void sample(int sample, const mod::Song* pSong, audio::IDriver* pDriver);
 
