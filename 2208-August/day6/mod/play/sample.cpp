@@ -23,7 +23,7 @@
 #include "../constants.h"
 #include "../structures.h"
 #include "../../audio/idriver.h"
-
+#include "player/player.h"
 
 BEGIN_NAMESPACE(mod)
 BEGIN_NAMESPACE(play)
@@ -58,9 +58,8 @@ void sample(int sample, const mod::Song* pSong, audio::IDriver* pDriver)
     const audio::Parameters* pParams = pDriver->getParams();
 
     // compute the sample rate and its total length
-    uint16_t sample_rate = amigaFrequency(
-            amigaPeriod(kDefaultNote, sample_hdr->finetune)
-    );
+    uint16_t period = (8363 * kPeriodTable[kDefaultNote]) / kFineTune2Hz[sample_hdr->finetune];
+    uint16_t sample_rate = kDefaultPeriodFreq / (period << 1);
 
     float duration = (float)sample_hdr->length / (float)sample_rate;
     std::cout << "Sample: rate = " << sample_rate << " ";
