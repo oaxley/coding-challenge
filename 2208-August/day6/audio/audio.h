@@ -29,6 +29,11 @@ typedef enum {
     kPulseAudio,
 } DriverEnum;
 
+typedef enum {
+    kLeft,
+    kRight,
+} PanEnum;
+
 END_NAMESPACE(audio)
 
 #endif // AUDIO_H
