@@ -111,7 +111,8 @@ void PulseDriver::push(char* buffer, int frames, int count)
     while (count--) {
         int retval = pa_simple_write(data_->hndPulse, buffer, frames, &error);
         if (retval < 0) {
-            throw AudioError("Unable to play all the frames.");
+            // throw AudioError("Unable to play all the frames.");
+            throw AudioError(pa_strerror(retval));
         }
     }
 }
