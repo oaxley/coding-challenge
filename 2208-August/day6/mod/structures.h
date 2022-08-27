@@ -54,7 +54,7 @@ typedef struct {
 // MOD Tracker note
 typedef struct {
     uint8_t note;                           // note number
-    uint8_t sample;                         // sample number
+    uint8_t instrument;                     // sample number
     uint8_t effect;                         // effect
     uint8_t parameters;                     // effect parameters
 } Note;

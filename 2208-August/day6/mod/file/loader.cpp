@@ -210,10 +210,17 @@ uint8_t Loader::OpaqueData::loadSampleInformation()
 
         // volume
         pSample->volume = readByte();
+        if (pSample->volume > 64) {
+            pSample->volume = 64;
+        }
 
         // loops in bytes (stored as number of words)
         pSample->loop_start = readWord() * 2;
         pSample->loop_length = readWord() * 2;
+        if (pSample->loop_start == 0) {
+            pSample->loop_length = 0;
+        }
+
 
         // add the sample to the list
         pSong_->samples.push_back(pSample);
@@ -256,7 +263,7 @@ void Loader::OpaqueData::loadPatternData()
                 // point our note to the current pattern
                 Note* pNote = (Note*)ptr;
 
-                pNote->sample = ((buffer[0] & 0xF0) + (buffer[2] >> 4));
+                pNote->instrument = ((buffer[0] & 0xF0) + (buffer[2] >> 4));
                 pNote->effect = buffer[2] & 0x0F;
                 pNote->parameters = buffer[3];
 
