@@ -22,6 +22,9 @@ BEGIN_NAMESPACE(mod)
 BEGIN_NAMESPACE(display)
 
 
+// function to display a single note
+void note(char* pTrack);
+
 // function to display track information
 void track(int track, const mod::Song* pSong);
 

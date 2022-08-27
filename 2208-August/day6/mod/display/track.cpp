@@ -37,6 +37,40 @@ const char* kNoteName[] = {
 
 
 //----- functions
+void note(char* pTrack)
+{
+    mod::Note* pNote = (mod::Note*)pTrack;
+
+    const char* note_name = kNoteName[(int)pNote->note];
+    int instr  = (int)pNote->instrument;
+    int effect = (int)pNote->effect;
+    int params = (int)pNote->parameters;
+
+
+    std::cout << note_name << ".";
+
+    if (instr == 0) {
+        std::cout << "..";
+    }
+    else {
+        std::cout << std::setw(2) << std::setfill('.');
+        std::cout << std::hex << std::uppercase << instr << std::dec;
+    }
+    std::cout << "..";
+
+    if (effect == 0 && params == 0) {
+        std::cout << "...";
+    } else {
+        std::cout << std::hex << effect << std::dec;
+        std::cout << std::setw(2) << std::setfill('0') << std::hex;
+        std::cout << params << std::dec;
+    }
+
+    std::cout << " | ";
+
+}
+
+
 void track(int track, const mod::Song* pSong)
 {
     if ((track < 0) || (track > pSong->header->max_pattern)) {
@@ -55,40 +89,7 @@ void track(int track, const mod::Song* pSong)
 
         for (int ch = 0; ch < pSong->header->channels; ++ch)
         {
-            mod::Note* pNote = (mod::Note*)pTrack;
-
-            const char* note_name = kNoteName[(int)pNote->note];
-            int sample = (int)pNote->sample;
-            int effect = (int)pNote->effect;
-            int params = (int)pNote->parameters;
-
-
-            std::cout << note_name << ".";
-
-            if (sample == 0) {
-                std::cout << "..";
-            }
-            else {
-                std::cout << std::setw(2) << std::setfill('.');
-                std::cout << std::hex << std::uppercase << sample << std::dec;
-            }
-            std::cout << "..";
-
-            if (effect == 0) {
-                std::cout << ".";
-            } else {
-                std::cout << std::hex << effect << std::dec;
-            }
-
-            if (params == 0) {
-                std::cout << "..";
-            } else {
-                std::cout << std::setw(2) << std::setfill('0') << std::hex;
-                std::cout << params << std::dec;
-            }
-
-            std::cout << " | ";
-
+            note(pTrack);
             pTrack += 4;
         }
 
