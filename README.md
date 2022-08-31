@@ -50,7 +50,16 @@ This way we can refresh some old languages and learn new ones.
 | [rs-rps](./2207-July/rs-rps/) | Rock, Paper, Scissors ... | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
 | [rs-bookmark](./2207-July/rs-bookmark/) | A rudimentary bookmark manager | ![Rust](https://img.shields.io/badge/rust-blue?style=flat-square&logo=rust&logoColor=404040)
 
+### **August 2022 : Making some noise**
 
+| Project Name | Description | Language |
+| :-- | :-- | :-- |
+| [day-1](./2208-August/day1/) | Generating a Tone with Alsa | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
+| [day-2](./2208-August/day2/) | Play a MIDI note with Alsa | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
+| [day-3](./2208-August/day3/) | Play a Tone with PulseAudio | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
+| [day-4](./2208-August/day4/) | A generic Audio Driver | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
+| [day-5](./2208-August/day5/) | MOD/S3M/XM information display | ![Python](https://img.shields.io/badge/Python-blue?style=flat-square&logo=python&logoColor=ffdd54)
+| [day-6](./2208-August/day6/) | MOD Player | ![C](https://img.shields.io/badge/c-blue?style=flat-square&logo=c&logoColor=white)
 ---
 ## **License**
 
