@@ -15,15 +15,12 @@
 //----- includes
 #include "play.h"
 
-#include <unistd.h>
-
 #include <iostream>
-#include <cstring>
+#include <vector>
 
 #include "../constants.h"
 #include "../structures.h"
 #include "../../audio/idriver.h"
-#include "player/player.h"
 
 BEGIN_NAMESPACE(mod)
 BEGIN_NAMESPACE(play)
@@ -39,96 +36,56 @@ void sample(int sample, const mod::Song* pSong, audio::IDriver* pDriver)
     }
 
     // retrieve a pointer to the audio data
-    mod::Sample *sample_hdr = pSong->samples[sample - 1];
-    if (sample_hdr->length == 0) {
+    const mod::Sample *sample_hdr = pSong->samples[sample - 1];
+    if ((sample_hdr->length == 0) || (sample_hdr->pData == nullptr)) {
         std::cout << "Nothing to play as sample is empty." << std::endl;
         return;
     }
 
-    // no data, nothing to play
-    if (sample_hdr->length == 0)
-        return;
-
-    // audio buffer
-    const int bufsize = 1024;
-    uint8_t* pBuffer = new uint8_t[bufsize];
-    memset(pBuffer, 0, bufsize);
-
     // retrieve the audio parameters
     const audio::Parameters* pParams = pDriver->getParams();
+    const int channels = pParams->channels;
 
-    // compute the sample rate and its total length
-    uint16_t period = (8363 * kPeriodTable[kDefaultNote]) / kFineTune2Hz[sample_hdr->finetune];
-    uint16_t sample_rate = kDefaultPeriodFreq / (period << 1);
-
-    float duration = (float)sample_hdr->length / (float)sample_rate;
-    std::cout << "Sample: rate = " << sample_rate << " ";
+    // compute the sample rate (C-2 with the sample finetune) and its duration
+    double period = (8363.0 * kPeriodTable[kDefaultNote]) / kFineTune2Hz[sample_hdr->finetune & 0x0F];
+    double sample_rate = kDefaultPeriodFreq / (period * 2.0);
+    double duration = sample_hdr->length / sample_rate;
+    std::cout << "Sample: rate = " << (int)sample_rate << " ";
     std::cout << "duration = " << duration << std::endl;
 
-    // compute the max length to play this sample at our current playing rate
-    int max_length = (int)(pParams->rate * duration);
-#if DEBUG
-    std::cerr << "max_length = " << max_length << std::endl;
-#endif
+    // 16.16 fixed point resampling increment
+    uint32_t step = (uint32_t)((sample_rate * 65536.0) / pParams->rate);
 
-    // resampling increment
-    int incr = (sample_rate * 100) / pParams->rate;
-#if DEBUG
-    std::cerr << "resampling incr = " << incr << std::endl;
-#endif
+    // audio buffer
+    const int frames_per_block = 1024;
+    std::vector<int16_t> buffer(frames_per_block * channels);
 
-    // sample data and audio buffer counter
-    char* pData = sample_hdr->pData;
-    int bufcount = 0;
-    int acc = 0;            // accumulator
-    int pos = 0;            // sample position
-    for (int i = 0; i < max_length; i++)
+    const int8_t* pData = sample_hdr->pData;
+    uint64_t pos = 0;                   // 16.16 position in the sample
+    uint64_t end = (uint64_t)sample_hdr->length << 16;
+    int count = 0;
+    while (pos < end)
     {
-        int value;
+        // sample value scaled to 16-bit with the sample volume
+        int value = pData[pos >> 16] * sample_hdr->volume * 4;
 
-        // keep accumulating the delta
-        acc = acc + incr;
-        if (acc > 100) {
-            pos = pos + 1;
-            acc -= 100;
+        for (int c = 0; c < channels; c++) {
+            buffer[count++] = (int16_t)value;
         }
 
-        if (pos > sample_hdr->length) {
-            value = 0;
-        } else {
-            value = pData[pos] + 128;
-        }
-
-        // adjust the value with the volume
-        value = (64 * value) / 256;
-
-        // fill the buffer depending on the number of audio channels
-        switch (pParams->channels)
-        {
-            case 1:     // MONO
-                pBuffer[bufcount++] = value;
-                break;
-            case 2:     // STEREO
-                pBuffer[bufcount++] = value;        // LEFT channel
-                pBuffer[bufcount++] = value;        // RIGHT channel
-                break;
-        }
+        pos += step;
 
         // we reached the available space in the buffer
-        if (bufcount == bufsize) {
-            pDriver->push((char*)pBuffer, bufsize, 1);
-
-            bufcount = 0;
-            memset(pBuffer, 0, bufsize);
+        if (count == (int)buffer.size()) {
+            pDriver->push((char*)buffer.data(), count * sizeof(int16_t), 1);
+            count = 0;
         }
     }
 
-    if (bufcount > 0) {
-        pDriver->push((char*)pBuffer, bufsize, 1);
+    // flush the remaining frames only
+    if (count > 0) {
+        pDriver->push((char*)buffer.data(), count * sizeof(int16_t), 1);
     }
-
-    delete [] pBuffer;
-
 }
 
 END_NAMESPACE(play)

@@ -14,6 +14,9 @@
 #ifndef MOD_PLAY_PLAYER_H
 #define MOD_PLAY_PLAYER_H
 
+#include <vector>
+#include <cstdint>
+
 #include "../../../slMacros.h"
 #include "../../../audio/audio.h"
 #include "../../constants.h"
@@ -32,9 +35,8 @@ struct Player
     const mod::Song* pSong = nullptr;
     const audio::Parameters* pParams = nullptr;
 
-    bool (*fnSetTimer)() { nullptr };
-
     bool is_playing = false;
+    bool show_rows = true;      // display the pattern rows while playing
 
     int bpm = 0;
     int speed = 0;
@@ -42,52 +44,60 @@ struct Player
     int row = 0;
     int order = 0;
     int pattern = 0;
-    int samples_per_tick = 0;
+
+    // fractional number of frames per tick (rate * 5 / (2 * bpm))
+    int tick_remainder = 0;
 
     bool pattern_jump = false;
     bool pattern_break = false;
+    bool pattern_loop_jump = false;
 
     int pattern_jump_value = 0;
     int pattern_break_value = 0;
+    int pattern_loop_target = 0;
 
-    int pattern_delay = 0;
+    int pattern_delay = 0;      // number of remaining repetitions of the row
+    bool pattern_delay_active = false;  // the current row is a repetition
+
+    int mix_gain = 0;           // master gain (8.8 fixed point)
 
     Channel channels[kMaxChannels];
-    int volume_table[kMaxVolume][256];
 
-    //----- audio buffer
-    uint8_t* audio_buffer = nullptr;
-    uint16_t audio_ptr;
-    uint16_t audio_block_size;
-    uint16_t audio_block_count;
-    uint16_t audio_size;
+    //----- audio buffers
+    std::vector<int32_t> mix_buffer;
+    std::vector<int16_t> audio_buffer;
 
 
     //----- methods
-    bool create(audio::IDriver*, const mod::Song*, int, int);
+    bool create(audio::IDriver*, const mod::Song*);
     void destroy();
 
-    void updateNote();
-    void updateEffect();
+    // process one tick (sequencing + mixing + output); false at the end of the song
+    bool processTick();
 
 private:
-    void createVolTable();
-    float bpmToFrequency(int bpm);
-    void setPanning(int ch);
+    void updateNote();
+    void updateEffect();
+    bool nextRow();
 
     //----- replay functions
-    void playInstrument();
+    int framesForTick();
+    void mix(int frames);
+    void mixDeclick(int32_t* pOut, int frames, Channel& channel);
+    void triggerNote(int ch);
+    void stopVoice(Channel& channel);
 
     //----- resampling functions
     void setFrequency(int ch, int period);
-    float amigaFrequency(int period);
-    float amigaPeriod(int note, int finetune);
+    int amigaPeriod(int note, int finetune);
 
     //----- volume functions
     void setVolume(int ch, int value);
     void slideVolume(int ch, int value);
+    void volumeSlide(int ch, int parameters);
 
     //----- vibrato / portamento effects
+    int waveformDelta(int waveform, int pos);
     void doVibrato(int ch);
     void doPortamento(int ch);
     void doTremolo(int ch);

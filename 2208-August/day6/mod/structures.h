@@ -42,13 +42,13 @@ typedef struct
 // MOD Tracker sample
 typedef struct {
     uint8_t name[kSampleNameLength];        // sample name
-    uint16_t length;                        // sample length
-    uint8_t finetune;                       // finetune value
+    uint32_t length;                        // sample length in bytes (up to 128 KB)
+    uint8_t finetune;                       // finetune value (0..15)
     uint8_t volume;                         // sample volume
-    uint16_t loop_start;                    // loop start
-    uint16_t loop_length;                   // loop length
+    uint32_t loop_start;                    // loop start in bytes
+    uint32_t loop_length;                   // loop length in bytes (0 = not looped)
 
-    char* pData;                            // a pointer to the data in memory
+    int8_t* pData;                          // a pointer to the (signed) data in memory
 } Sample;
 
 // MOD Tracker note

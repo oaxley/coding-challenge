@@ -37,6 +37,7 @@ class IDriver
         virtual void open(Parameters* pParams) = 0;
         virtual void close() = 0;
         virtual void setup() = 0;
+        // write `frames` BYTES of signed 16-bit interleaved audio, `count` times
         virtual void push(char* buffer, int frames, int count) = 0;
 
         const Parameters* getParams() {

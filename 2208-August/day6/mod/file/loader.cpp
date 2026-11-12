@@ -199,14 +199,14 @@ uint8_t Loader::OpaqueData::loadSampleInformation()
         // read the sample name and remove non printable chars
         readString(kSampleNameLength, (char*)pSample->name);
 
-        // sample length in bytes (stored as number of words)
-        pSample->length = readWord() * 2;
+        // sample length in bytes (stored as number of words, can exceed 64 KB)
+        pSample->length = static_cast<uint32_t>(readWord()) * 2;
         if (pSample->length > 0) {
             samples++;
         }
 
-        // finetune
-        pSample->finetune = readByte();
+        // finetune (only the lower nibble is meaningful)
+        pSample->finetune = readByte() & 0x0F;
 
         // volume
         pSample->volume = readByte();
@@ -215,10 +215,16 @@ uint8_t Loader::OpaqueData::loadSampleInformation()
         }
 
         // loops in bytes (stored as number of words)
-        pSample->loop_start = readWord() * 2;
-        pSample->loop_length = readWord() * 2;
-        if (pSample->loop_start == 0) {
+        pSample->loop_start = static_cast<uint32_t>(readWord()) * 2;
+        pSample->loop_length = static_cast<uint32_t>(readWord()) * 2;
+
+        // a loop length of 2 bytes (1 word) means "no loop"; a loop starting
+        // at 0 is perfectly valid. Clamp the loop to the sample boundaries.
+        if (pSample->loop_length <= 2 || pSample->loop_start >= pSample->length) {
+            pSample->loop_start = 0;
             pSample->loop_length = 0;
+        } else if (pSample->loop_start + pSample->loop_length > pSample->length) {
+            pSample->loop_length = pSample->length - pSample->loop_start;
         }
 
 
@@ -304,13 +310,13 @@ void Loader::OpaqueData::loadSampleData()
         // only samples with a length > 0 are present in the file
         if (it->length > 0) {
             // allocate enough memory for this sample
-            it->pData = (char*) new char[it->length];
-            if (it->pData == nullptr) {
-                throw OutOfMemoryError("Unable to allocate memory for sample data.");
-            }
+            it->pData = new int8_t[it->length]();
 
-            // load the data from the file
-            readBytes(it->length, it->pData);
+            // load the data from the file (truncated files leave zeros)
+            handle_.read(reinterpret_cast<char*>(it->pData), it->length);
+            if (!handle_) {
+                handle_.clear();
+            }
         }
     }
 }
@@ -388,6 +394,9 @@ uint16_t Loader::load()
 
     // song length
     hdr->length = data_->readByte();
+    if ((hdr->length == 0) || (hdr->length > kMaxNumberPattern)) {
+        throw InvalidModParameter("Invalid song length.");
+    }
 
     // unused
     data_->readByte();

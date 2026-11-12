@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
     audio::DriverEnum driver = audio::kPulseAudio;
     OperationEnum operation = kPlaySong;        // default operation
     std::string filename = "";
-    int opvalue;
+    int opvalue = 0;
 
     // command line options
     struct option long_options[] = {

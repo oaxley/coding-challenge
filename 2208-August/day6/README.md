@@ -10,7 +10,9 @@ Following the previous day where we explore the MOD format, today we interpret i
 
 Only the .MOD format is supported, mainly because it took a long time to figure out how all the effects are implemented and how to support them.
 
-The output quality is not the best we can have, as some "pops" and "clicks" are still present sometime.
+The mixer works in signed integers (16-bit output, linear interpolation, volume ramps and
+voice fade-out) and the playback is paced by the audio output instead of a timer, which
+removes the "pops" and "clicks" of the first version.
 
 ## Usage
 

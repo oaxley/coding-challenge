@@ -69,7 +69,7 @@ void PulseDriver::open(Parameters* pParams)
 
     // sample format specifications
     pa_sample_spec ss = {
-        .format = PA_SAMPLE_U8,        // manually set for now
+        .format = PA_SAMPLE_S16NE,     // signed 16-bit, native endianness
         .rate = static_cast<unsigned int>(pParams->rate),
         .channels = static_cast<unsigned char>(pParams->channels)
     };
@@ -111,8 +111,7 @@ void PulseDriver::push(char* buffer, int frames, int count)
     while (count--) {
         int retval = pa_simple_write(data_->hndPulse, buffer, frames, &error);
         if (retval < 0) {
-            // throw AudioError("Unable to play all the frames.");
-            throw AudioError(pa_strerror(retval));
+            throw AudioError(pa_strerror(error));
         }
     }
 }

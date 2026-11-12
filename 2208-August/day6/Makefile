@@ -7,7 +7,7 @@ else
 	CC=g++
 endif
 
-CFLAGS=-g3
+CFLAGS=-g3 -O2 -std=c++17 -Wall
 LDFLAGS=-lm -lasound -lpulse -lpulse-simple -pthread
 
 # build dir and target
