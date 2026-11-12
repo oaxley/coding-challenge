@@ -24,3 +24,6 @@
 # ignore the temporary / sandbox directory
 **/tmp/*
 **/music/*
+
+# planning / notes directory
+workspace/
